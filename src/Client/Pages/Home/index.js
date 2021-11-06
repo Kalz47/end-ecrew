@@ -5,21 +5,36 @@ import Container from "../../Components/Container";
 import Category from "./Category";
 import Select from "react-select";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllSalons } from "../../../actions/salon";
+import { getAllSalons, getLocations } from "../../../actions/salon";
 
 export default function Home() {
   const dispatch = useDispatch();
+  const { salons, salonLoading } = useSelector((state) => state.salon);
+  const { locations } = useSelector((state) => state.location);
+  const [searchKey, setSearchKey] = useState("");
+
   const [isClearable] = useState(true);
 
   useEffect(() => {
     dispatch(getAllSalons());
   }, [dispatch]);
 
-  const options = [
-    { value: "chocolate", label: "Chocolate" },
-    { value: "strawberry", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" },
-  ];
+  const optionArray = [];
+
+  useEffect(() => {
+    dispatch(getLocations());
+  }, [dispatch]);
+
+  locations.map((location) =>
+    optionArray.push({ value: location.name, label: location.name })
+  );
+
+  const handleChange = (selectedOption) => {
+    setSearchKey({ selectedOption });
+  };
+
+  console.log("Locations", searchKey);
+
   return (
     <Container>
       <div className="bg-gray-50 ">
@@ -31,9 +46,10 @@ export default function Home() {
               </label>
               <Select
                 className="md:mt-4 sm:mt-2"
-                options={options}
-                defaultValue={"Select your location"}
+                options={optionArray}
+                defaultInputValue=""
                 isClearable={isClearable}
+                onChange={handleChange}
               />
             </div>
           </div>
@@ -41,14 +57,24 @@ export default function Home() {
             <Scrollbars style={{ height: 700 }}>
               <div className="space-y-4 px-4">
                 <Category />
-                <ServiceCard />
-                <ServiceCard />
-                <ServiceCard />
-                <ServiceCard />
+                {salons && !salonLoading
+                  ? searchKey === "" || searchKey.selectedOption === null
+                    ? salons.map((salon) => <ServiceCard />)
+                    : salons
+                        .filter(
+                          (salon) =>
+                            salon.location
+                              .toLowerCase()
+                              .indexOf(
+                                searchKey.selectedOption.value.toLowerCase()
+                              ) >= 0
+                        )
+                        .map((salon) => <ServiceCard />)
+                  : "Loading"}
               </div>
             </Scrollbars>
           </div>
-          <div className="md:p-8 ">
+          <div className="md:py-8 ">
             <div className="md:border-l border-gray-200 h-full">hi</div>
           </div>{" "}
         </div>
