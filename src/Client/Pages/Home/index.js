@@ -1,12 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ServiceCard from "./ServiceCard";
 import { Scrollbars } from "react-custom-scrollbars";
 import Container from "../../Components/Container";
 import Category from "./Category";
 import Select from "react-select";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllSalons } from "../../../actions/salon";
 
 export default function Home() {
+  const dispatch = useDispatch();
   const [isClearable] = useState(true);
+
+  useEffect(() => {
+    dispatch(getAllSalons());
+  }, [dispatch]);
 
   const options = [
     { value: "chocolate", label: "Chocolate" },
