@@ -13,9 +13,9 @@ export default function ServiceCard() {
         />
       </div>
       <div class="w-full md:w-3/5 text-left p-6 md:p-4 space-y-2">
-        <p class="text-xl text-gray-700 font-bold">Dany Bailey</p>
-        <p class="text-base text-gray-400 font-normal">Software Engineer</p>
-        <p class="text-base leading-relaxed text-gray-500 font-normal">
+        <p class="text-xl text-gray-700 font-bold AF">Dany Bailey</p>
+        <p class="text-base text-gray-400 font-normal AF">Software Engineer</p>
+        <p class="text-base leading-relaxed text-gray-500 font-normal AF">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua.
         </p>

@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.AF {
+  font-family: "Cairo", sans-serif;
+}
