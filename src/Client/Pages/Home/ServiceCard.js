@@ -18,10 +18,6 @@ export default function ServiceCard({ salon }) {
         <p className="text-base text-gray-400 font-normal AF">
           {salon.location}
         </p>
-        <p className="text-base leading-relaxed text-gray-500 font-normal AF">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </p>
 
         <div class="flex flex-row ...">
           <svg
