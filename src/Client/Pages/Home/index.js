@@ -25,9 +25,10 @@ export default function Home() {
     dispatch(getLocations());
   }, [dispatch]);
 
-  locations.map((location) =>
-    optionArray.push({ value: location.name, label: location.name })
-  );
+  locations &&
+    locations.map((location) =>
+      optionArray.push({ value: location.name, label: location.name })
+    );
 
   const handleChange = (selectedOption) => {
     setSearchKey({ selectedOption });
