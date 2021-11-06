@@ -34,7 +34,7 @@ export default function Home() {
     setSearchKey({ selectedOption });
   };
 
-  console.log("Locations", searchKey);
+  // console.log("Locations", searchKey);
 
   return (
     <Container>
@@ -60,7 +60,7 @@ export default function Home() {
                 <Category />
                 {salons && !salonLoading
                   ? searchKey === "" || searchKey.selectedOption === null
-                    ? salons.map((salon) => <ServiceCard />)
+                    ? salons.map((salon) => <ServiceCard salon={salon} />)
                     : salons
                         .filter(
                           (salon) =>

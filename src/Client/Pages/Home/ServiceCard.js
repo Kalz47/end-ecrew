@@ -2,27 +2,160 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React from "react";
 
-export default function ServiceCard() {
+export default function ServiceCard({ salon }) {
+  console.log(salon);
   return (
-    <div class="w-full bg-white rounded-lg sahdow-lg overflow-hidden flex flex-col md:flex-row">
-      <div class="w-full md:w-2/5 h-80">
+    <div className="w-full bg-white rounded-lg sahdow-lg overflow-hidden flex flex-col md:flex-row">
+      <div className="w-full md:w-2/5 h-80">
         <img
-          class="object-center object-cover w-full h-full"
+          className="object-center object-cover w-full h-full"
           src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80"
           alt="photo"
         />
       </div>
-      <div class="w-full md:w-3/5 text-left p-6 md:p-4 space-y-2">
-        <p class="text-xl text-gray-700 font-bold AF">Dany Bailey</p>
-        <p class="text-base text-gray-400 font-normal AF">Software Engineer</p>
-        <p class="text-base leading-relaxed text-gray-500 font-normal AF">
+      <div className="w-full md:w-3/5 text-left p-6 md:p-4 space-y-2">
+        <p className="text-xl text-gray-700 font-bold AF">{salon.name}</p>
+        <p className="text-base text-gray-400 font-normal AF">
+          {salon.location}
+        </p>
+        <p className="text-base leading-relaxed text-gray-500 font-normal AF">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua.
         </p>
-        <div class="flex justify-start space-x-2">
-          <a href="#" class="text-gray-500 hover:text-gray-600">
+
+        <div class="flex flex-row ...">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6 text-gray-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>{" "}
+          <div className="text-gray-500 pl-2">Open Time : {salon.openTime}</div>
+        </div>
+        <div class="flex flex-row ...">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6 text-gray-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>{" "}
+          <div className="text-gray-500 pl-2">
+            Close Time : {salon.closeTime}
+          </div>
+        </div>
+        <div class="flex flex-row ...">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6 text-gray-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+            />
+          </svg>
+          <div className="text-gray-500 pl-2">Contact : {salon.contact}</div>
+        </div>
+
+        <div className="grid md:grid-cols-6 grid-cols-2">
+          {salon.wifi ? (
+            <div className="flex flex-row">
+              <div className="text-gray-500">Wifi</div>
+              <a href="#" className="text-gray-500 hover:text-gray-600">
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  ></path>
+                </svg>
+              </a>
+            </div>
+          ) : (
+            ""
+          )}
+
+          {salon.ac ? (
+            <div className="flex flex-row">
+              <div className="text-gray-500">A/C</div>
+              <a href="#" className="text-gray-500 hover:text-gray-600">
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  ></path>
+                </svg>
+              </a>
+            </div>
+          ) : (
+            ""
+          )}
+
+          {salon.parking ? (
+            <div className="flex flex-row">
+              <div className="text-gray-500">Parking</div>
+              <a href="#" className="text-gray-500 hover:text-gray-600">
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  ></path>
+                </svg>
+              </a>
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
+        {/* sdsd */}
+
+        {/* <div className="flex justify-start space-x-2">
+          <a href="#" className="text-gray-500 hover:text-gray-600">
             <svg
-              class="w-6 h-6"
+              className="w-6 h-6"
               aria-hidden="true"
               fill="currentColor"
               viewBox="0 0 24 24"
@@ -34,9 +167,9 @@ export default function ServiceCard() {
               ></path>
             </svg>
           </a>
-          <a href="#" class="text-gray-500 hover:text-gray-600">
+          <a href="#" className="text-gray-500 hover:text-gray-600">
             <svg
-              class="w-6 h-6"
+              className="w-6 h-6"
               aria-hidden="true"
               fill="currentColor"
               viewBox="0 0 24 24"
@@ -48,9 +181,9 @@ export default function ServiceCard() {
               ></path>
             </svg>
           </a>
-          <a href="#" class="text-gray-500 hover:text-gray-600">
+          <a href="#" className="text-gray-500 hover:text-gray-600">
             <svg
-              class="w-6 h-6"
+              className="w-6 h-6"
               aria-hidden="true"
               fill="currentColor"
               viewBox="0 0 24 24"
@@ -58,9 +191,9 @@ export default function ServiceCard() {
               <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"></path>
             </svg>
           </a>
-          <a href="#" class="text-gray-500 hover:text-gray-600">
+          <a href="#" className="text-gray-500 hover:text-gray-600">
             <svg
-              class="w-6 h-6"
+              className="w-6 h-6"
               aria-hidden="true"
               fill="currentColor"
               viewBox="0 0 24 24"
@@ -72,7 +205,7 @@ export default function ServiceCard() {
               ></path>
             </svg>
           </a>
-        </div>
+        </div> */}
       </div>
     </div>
   );
