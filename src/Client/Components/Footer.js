@@ -90,7 +90,6 @@ export default function Footer() {
                     </a>
                   </li>
                   <li>
-                    {/* <a href="tel:+1-555-555-1212">555-555-1212</a> */}
                     <a
                       className="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm"
                       href="tel:+1-555-555-1212"
