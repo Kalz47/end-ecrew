@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { TimePicker } from "antd";
+import moment from "moment";
+import "antd/dist/antd.css";
 
 export default function AdminHome() {
   const [tab, setTab] = useState(0);
@@ -76,95 +79,6 @@ export default function AdminHome() {
                 />
               </p>
             </div>
-            <div className="flex flex-row w-64">
-              <div>
-                <label for="lastname" className="bg-white text-gray-600 px-1">
-                  Open Time{" "}
-                </label>{" "}
-                <div>
-                  <div className="p-2 w-40 bg-white rounded-lg text-gray-600">
-                    <div className="flex">
-                      <select
-                        name="hours"
-                        className="bg-transparent text-xl appearance-none outline-none bg-white text-gray-600 rounded-lg"
-                      >
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">10</option>
-                        <option value="12">12</option>
-                      </select>
-                      <span className="text-xl mr-3">:</span>
-                      <select
-                        name="minutes"
-                        className="bg-transparent text-xl appearance-none outline-none mr-4"
-                      >
-                        <option value="0">00</option>
-                        <option value="30">30</option>
-                      </select>
-                      <select
-                        name="ampm"
-                        className="bg-transparent text-xl appearance-none outline-none"
-                      >
-                        <option value="am">AM</option>
-                        <option value="pm">PM</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <label for="lastname" className="bg-white text-gray-600 px-1">
-                  Close Time{" "}
-                </label>{" "}
-                <div>
-                  <div className="p-2 w-40 bg-white rounded-lg text-gray-600">
-                    <div className="flex">
-                      <select
-                        name="hours"
-                        className="bg-transparent text-xl appearance-none outline-none bg-white text-gray-600"
-                      >
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">10</option>
-                        <option value="12">12</option>
-                      </select>
-                      <span className="text-xl mr-3">:</span>
-                      <select
-                        name="minutes"
-                        className="bg-transparent text-xl appearance-none outline-none mr-4"
-                      >
-                        <option value="0">00</option>
-                        <option value="30">30</option>
-                      </select>
-                      <select
-                        name="ampm"
-                        className="bg-transparent text-xl appearance-none outline-none"
-                      >
-                        <option value="am">AM</option>
-                        <option value="pm">PM</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
             <div className="inline-block relative w-64">
               <select className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
                 <option>
@@ -211,6 +125,26 @@ export default function AdminHome() {
                 </span>
                 <input type="file" className="hidden" />
               </label>
+            </div>
+            <div className="flex flex-row space-x-8">
+              <div>
+                <label for="name" className="bg-white text-gray-600 px-1">
+                  Open Time{" "}
+                </label>{" "}
+                <TimePicker
+                  defaultValue={moment("12:08", "HH:mm")}
+                  format="HH:mm"
+                />
+              </div>
+              <div>
+                <label for="name" className="bg-white text-gray-600 px-1">
+                  Close Time{" "}
+                </label>{" "}
+                <TimePicker
+                  defaultValue={moment("12:08", "HH:mm")}
+                  format="HH:mm"
+                />
+              </div>
             </div>
             <div className="space-x-20">
               <label className="inline-flex items-center mt-3">
