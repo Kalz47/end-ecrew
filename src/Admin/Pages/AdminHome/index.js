@@ -6,10 +6,6 @@ import "antd/dist/antd.css";
 export default function AdminHome() {
   const [tab, setTab] = useState(0);
 
-  function onChange(time, timeString) {
-    console.log(time, timeString);
-  }
-
   return (
     <>
       <div className="flex justify-center flex-row space-x-4">
@@ -130,14 +126,25 @@ export default function AdminHome() {
                 <input type="file" className="hidden" />
               </label>
             </div>
-            <div>
-              {" "}
-              <TimePicker
-                // onChange={onChange}
-                defaultOpenValue={moment("00:00:00", "HH:mm:ss")}
-                className="w-1/2"
-              />
-              ,
+            <div className="flex flex-row space-x-8">
+              <div>
+                <label for="name" className="bg-white text-gray-600 px-1">
+                  Open Time{" "}
+                </label>{" "}
+                <TimePicker
+                  defaultValue={moment("12:08", "HH:mm")}
+                  format="HH:mm"
+                />
+              </div>
+              <div>
+                <label for="name" className="bg-white text-gray-600 px-1">
+                  Close Time{" "}
+                </label>{" "}
+                <TimePicker
+                  defaultValue={moment("12:08", "HH:mm")}
+                  format="HH:mm"
+                />
+              </div>
             </div>
             <div className="space-x-20">
               <label className="inline-flex items-center mt-3">
