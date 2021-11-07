@@ -10,3 +10,10 @@
     50% 50% no-repeat;
   background-size: 100%;
 }
+.AF {
+  font-family: "Cairo", sans-serif;
+}
+
+.text-blue-colour-dark {
+  color: #000066;
+}
