@@ -61,7 +61,9 @@ export default function Home() {
                 <Category />
                 {salons && !salonLoading
                   ? searchKey === "" || searchKey.selectedOption === null
-                    ? salons.map((salon) => <ServiceCard salon={salon} />)
+                    ? salons.map((salon) => (
+                        <ServiceCard key={salon._id} salon={salon} />
+                      ))
                     : salons
                         .filter(
                           (salon) =>
@@ -71,7 +73,9 @@ export default function Home() {
                                 searchKey.selectedOption.value.toLowerCase()
                               ) >= 0
                         )
-                        .map((salon) => <ServiceCard />)
+                        .map((salon) => (
+                          <ServiceCard key={salon._id} salon={salon} />
+                        ))
                   : "Loading"}
               </div>
             </Scrollbars>
