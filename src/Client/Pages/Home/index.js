@@ -6,6 +6,7 @@ import Category from "./Category";
 import Select from "react-select";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllSalons, getLocations } from "../../../actions/salon";
+import ServiceImage from "../../Components/logo/salon-working-01.png";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -76,7 +77,10 @@ export default function Home() {
             </Scrollbars>
           </div>
           <div className="md:py-8 ">
-            <div className="md:border-l border-gray-200 h-full">hi</div>
+            <div className="md:border-l border-gray-200 h-full">
+              {" "}
+              <img alt="meaningfull" className="pt-44" src={ServiceImage} />
+            </div>
           </div>{" "}
         </div>
       </div>
