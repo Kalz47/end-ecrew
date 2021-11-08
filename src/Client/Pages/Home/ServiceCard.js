@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from "react";
 import Parking from "../../Components/logo/parking.png";
 import AirCond from "../../Components/logo/air-conditioner.png";
+import Card from "../../Components/logo/credit-card.png";
+
 import { PORT } from "../../../actions/types";
 
 export default function ServiceCard({ salon }) {
@@ -11,7 +13,6 @@ export default function ServiceCard({ salon }) {
   useEffect(() => {
     setImage(`${PORT}/salon/image/${salon._id}`);
   }, [salon._id]);
-  console.log(salon);
   return (
     <div className="w-full bg-white rounded-lg sahdow-lg overflow-hidden flex flex-col md:flex-row">
       <div className="w-full md:w-2/5 h-80">
@@ -136,6 +137,14 @@ export default function ServiceCard({ salon }) {
             <div>
               {" "}
               <img className="w-6 h-6" alt="Parking" src={Parking} />
+            </div>
+          ) : (
+            ""
+          )}
+          {salon.card ? (
+            <div>
+              {" "}
+              <img className="w-6 h-6" alt="Card" src={Card} />
             </div>
           ) : (
             ""

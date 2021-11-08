@@ -8,6 +8,10 @@ import {
   GET_LOCATIONS_FAIL,
   ADD_LOCATION_FAIL,
   ADD_LOCATION_SUCCESS,
+  GET_TYPES_SUCCESS,
+  GET_TYPES_FAIL,
+  ADD_TYPE_FAIL,
+  ADD_TYPE_SUCCESS,
 } from "./types";
 import axios from "axios";
 
@@ -74,6 +78,36 @@ export const addNewLocation = (data) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: ADD_LOCATION_FAIL,
+      payload: error.response,
+    });
+  }
+};
+
+export const addSalonType = (data) => async (dispatch) => {
+  try {
+    const res = await axios.post(`${PORT}/type`, data);
+    dispatch({
+      type: ADD_TYPE_SUCCESS,
+      payload: res.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ADD_TYPE_FAIL,
+      payload: error.response,
+    });
+  }
+};
+
+export const getTypes = () => async (dispatch) => {
+  try {
+    const res = await axios.get(`${PORT}/type`);
+    dispatch({
+      type: GET_TYPES_SUCCESS,
+      payload: res.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_TYPES_FAIL,
       payload: error.response,
     });
   }
