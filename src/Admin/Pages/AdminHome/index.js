@@ -3,6 +3,8 @@ import { TimePicker } from "antd";
 import moment from "moment";
 import "antd/dist/antd.css";
 import { useDispatch, useSelector } from "react-redux";
+import { getAllSalons, getLocations } from "../../../actions/salon";
+import { getLocations, addSalon, addNewLocation } from "../../../actions/salon";
 import {
   getLocations,
   addSalon,
@@ -15,6 +17,14 @@ import "react-toastify/dist/ReactToastify.css";
 
 export default function AdminHome() {
   const [tab, setTab] = useState(0);
+  const dispatch = useDispatch();
+  const { salons, salonLoading } = useSelector((state) => state.salon);
+
+  useEffect(() => {
+    dispatch(getAllSalons());
+  }, [dispatch]);
+
+  console.log(salons, "admin form");
 
   const dispatch = useDispatch();
 
@@ -403,6 +413,61 @@ export default function AdminHome() {
           </div>{" "}
         </form>
       </div>
+
+      <div className="md:grid md:grid-cols-2">
+        <div className="p-4 w-full">
+          <label for="name" className="bg-white text-gray-600 ml-16">
+            Salon List{" "}
+          </label>{" "}
+          <table className="table-auto w-full my-6">
+            <thead>
+              <tr>
+                <th className="w-1/5 text-center text-gray-600 AF">
+                  Salon name
+                </th>
+                <th className="w-1/5 text-center text-gray-600 AF">Location</th>
+                <th className="w-1/5 text-center text-gray-600 AF">
+                  Salon Type
+                </th>
+                <th className="w-1/5 text-center text-gray-600 AF">Edit</th>
+                <th className="w-1/5 text-center text-gray-600 AF">Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {salons && !salonLoading
+                ? salons.map((salon) => (
+                    <>
+                      <tr className="">
+                        <td className="text-center text-gray-600 AF">
+                          {salon.name}
+                        </td>
+                        <td className="text-center text-gray-600 AF">
+                          {salon.location}
+                        </td>
+                        <td className="text-center text-gray-600 AF">
+                          {salon.salonType}
+                        </td>
+                        <td className="text-center">
+                          <button class="bg-yellow-700 hover:bg-yellow-600 text-white font-bold py-1 px-2 rounded inline-flex items-center">
+                            <i className="fas fa-edit fill-current w-4 h-4 mr-2"></i>
+                            <span className="font-normal">Edit</span>
+                          </button>
+                        </td>
+                        <td className="text-center py-1">
+                          <button class="bg-red-700 hover:bg-red-600 text-white font-bold py-1 px-2 rounded inline-flex items-center">
+                            <i className="far fa-trash-alt fill-current w-4 h-4 mr-2"></i>
+                            <span className="font-normal">Delete</span>
+                          </button>
+                        </td>
+                      </tr>{" "}
+                    </>
+                  ))
+                : "Loading"}
+            </tbody>
+          </table>
+        </div>
+        <div>dffdf</div>
+
       <div className={`p-10 ${tab === 2 ? "block" : "hidden"}`}>
         <form onSubmit={handleTypeSubmit}>
           <div className="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1 w-40">
@@ -434,6 +499,7 @@ export default function AdminHome() {
             </button>
           </div>{" "}
         </form>
+
       </div>
     </>
   );
