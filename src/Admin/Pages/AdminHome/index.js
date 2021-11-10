@@ -9,6 +9,8 @@ import { getLocations, getTypes, addSalonType } from "../../../actions/salon";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { PORT } from "../../../actions/types";
 
 export default function AdminHome() {
   const [tab, setTab] = useState(0);
@@ -105,15 +107,17 @@ export default function AdminHome() {
     });
   };
 
-  // useEffect(() => {
-  //   if (locationError) {
-  //     toast.error(locationError);
-  //   } else {
-  //     setTimeout(() => {
-  //       window.location.reload();
-  //     }, 1500);
-  //   }
-  // }, []);
+  const handleDelete = async (id) => {
+    try {
+      const res = await axios.delete(`${PORT}/salon/${id}`);
+      toast.success(res);
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -427,6 +431,7 @@ export default function AdminHome() {
               </tr>
             </thead>
             <tbody>
+              {salonLoading && "There is no more salons"}
               {salons && !salonLoading
                 ? salons.map((salon) => (
                     <>
@@ -449,7 +454,10 @@ export default function AdminHome() {
                           </Link>
                         </td>
                         <td className="text-center py-1">
-                          <button class="bg-red-700 hover:bg-red-600 text-white font-bold py-1 px-2 rounded inline-flex items-center">
+                          <button
+                            onClick={() => handleDelete(salon._id)}
+                            className="bg-red-700 hover:bg-red-600 text-white font-bold py-1 px-2 rounded inline-flex items-center"
+                          >
                             <i className="far fa-trash-alt fill-current w-4 h-4 mr-2"></i>
                             <span className="font-normal">Delete</span>
                           </button>
@@ -461,7 +469,7 @@ export default function AdminHome() {
             </tbody>
           </table>
         </div>
-        <div>dffdf</div>
+        <div></div>
       </div>
 
       <div className={`p-10 ${tab === 2 ? "block" : "hidden"}`}>

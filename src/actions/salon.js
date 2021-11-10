@@ -63,11 +63,10 @@ export const getLocations = () => async (dispatch) => {
       payload: res.data,
     });
   } catch (error) {
-    // dispatch({
-    //   type: GET_LOCATIONS_FAIL,
-    //   payload: error.response,
-    // });
-    console.log("Error", error);
+    dispatch({
+      type: GET_LOCATIONS_FAIL,
+      payload: error.response,
+    });
   }
 };
 

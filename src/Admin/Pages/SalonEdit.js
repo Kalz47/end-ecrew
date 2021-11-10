@@ -1,29 +1,32 @@
 import { TimePicker } from "antd";
-import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { addSalon, getSingleSalon } from "../../actions/salon";
+import { getLocations, getSingleSalon, getTypes } from "../../actions/salon";
 
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { PORT } from "../../actions/types";
 
 export default function SalonEdit(props) {
+  const navigate = useNavigate();
+
   const { id } = useParams();
 
   const dispatch = useDispatch();
 
-  const { locations, locationsLoading } = useSelector(
-    (state) => state.location
-  );
-  const { types, typeLoading } = useSelector((state) => state.type);
+  useEffect(() => {
+    dispatch(getSingleSalon(id));
+    dispatch(getLocations());
+    dispatch(getTypes());
+  }, [dispatch, id]);
+
+  const { locations } = useSelector((state) => state.location);
+  const { types } = useSelector((state) => state.type);
   const { salon, salonLoading } = useSelector((state) => state.salon);
 
-  const [name, setName] = useState(!salonLoading ? salon.name : "");
-  const [location, setLocation] = useState(
-    locations && !locationsLoading && locations[0].name
-  );
-  const [salonType, setSalonType] = useState(
-    types && !typeLoading ? types[0].name : ""
-  );
+  const [name, setName] = useState();
+  const [location, setLocation] = useState("");
+  const [salonType, setSalonType] = useState("");
   const [contact, setContact] = useState("");
 
   const [openTime, setOpen] = useState("");
@@ -57,14 +60,31 @@ export default function SalonEdit(props) {
 
     image && data.append("image", image);
 
-    dispatch(addSalon(data));
+    try {
+      const res = axios.put(`${PORT}/salon/${id}`, data);
+      console.log(res);
+      navigate("/adminHome");
+    } catch (error) {
+      console.log("Put error", error);
+    }
   };
 
   useEffect(() => {
-    dispatch(getSingleSalon(id));
-  }, [dispatch, id]);
+    if (salon && !salonLoading) {
+      setName(salon.name);
+      setContact(salon.contact);
+      setGrade(salon.grade);
+      setLocation(salon.location);
+      setSalonType(salon.salonType);
+      setOpen(salon.openTime);
+      setClose(salon.closeTime);
+      setAc(salon.ac);
+      setWifi(salon.wifi);
+      setParking(salon.parking);
+      setCard(salon.card);
+    }
+  }, [salon, salonLoading, id]);
 
-  console.log("HI", name);
   return (
     <div>
       <form onSubmit={handleSubmit} className="bg-white shadow rounded-lg p-6">
@@ -217,7 +237,7 @@ export default function SalonEdit(props) {
                 Open Time{" "}
               </label>{" "}
               <TimePicker
-                defaultValue={moment("12:08", "HH:mm")}
+                defaultValue={openTime && openTime}
                 format="HH:mm"
                 onChange={(time, timeString) => setOpen(timeString)}
               />
@@ -227,7 +247,7 @@ export default function SalonEdit(props) {
                 Close Time{" "}
               </label>{" "}
               <TimePicker
-                defaultValue={moment("12:08", "HH:mm")}
+                defaultValue={openTime && openTime}
                 format="HH:mm"
                 onChange={(time, timeString) => setClose(timeString)}
               />
@@ -239,6 +259,7 @@ export default function SalonEdit(props) {
                 type="checkbox"
                 className="form-checkbox h-5 w-5 text-gray-600"
                 onChange={(e) => setAc(e.target.checked)}
+                checked={ac}
               />
               <span className="ml-2 text-gray-700">A/C</span>
             </label>
@@ -247,6 +268,7 @@ export default function SalonEdit(props) {
                 type="checkbox"
                 className="form-checkbox h-5 w-5 text-gray-600"
                 onChange={(e) => setParking(e.target.checked)}
+                checked={parking}
               />
               <span className="ml-2 text-gray-700">Parking</span>
             </label>
@@ -255,6 +277,7 @@ export default function SalonEdit(props) {
                 type="checkbox"
                 className="form-checkbox h-5 w-5 text-gray-600"
                 onChange={(e) => setWifi(e.target.checked)}
+                checked={wifi}
               />
               <span className="ml-2 text-gray-700">Wifi</span>
             </label>
@@ -263,6 +286,7 @@ export default function SalonEdit(props) {
                 type="checkbox"
                 className="form-checkbox h-5 w-5 text-gray-600"
                 onChange={(e) => setCard(e.target.checked)}
+                checked={card}
               />
               <span className="ml-2 text-gray-700">Card</span>
             </label>

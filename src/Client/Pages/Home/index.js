@@ -16,6 +16,7 @@ export default function Home() {
 
   const [searchKey, setSearchKey] = useState("");
   const [searchKeyTwo, setSearchKeyTwo] = useState("");
+  // const [searchKeyThree, setSearchKeyThree] = useState("");
 
   const [isClearable] = useState(true);
 
@@ -49,9 +50,24 @@ export default function Home() {
       typeArray.push({ value: type.sType, label: type.sType })
     );
 
-  console.log("searchKey", searchKey);
+  // const gradeArray = [
+  //   {
+  //     label: "Silver",
+  //     value: "Silver",
+  //   },
+  //   {
+  //     label: "Gold",
+  //     value: "Gold",
+  //   },
+  //   {
+  //     label: "Platinum",
+  //     value: "Platinum",
+  //   },
+  // ];
 
-  console.log("searchKey2", searchKeyTwo.selectedOption);
+  // const handleChangeGrade = (selectedOption) => {
+  //   setSearchKeyThree({ selectedOption });
+  // };
 
   return (
     <Container>
@@ -72,7 +88,7 @@ export default function Home() {
                 />
               </div>
             </div>
-            <div className="">
+            <div className="md:pb-4">
               <div className="md:border-r border-gray-200 h-full px-4 ">
                 <label className="AF text-gray-500 mt-8 md:mt-0 ">
                   Select your type
@@ -86,6 +102,20 @@ export default function Home() {
                 />
               </div>
             </div>
+            {/* <div className="">
+              <div className="md:border-r border-gray-200 h-full px-4 ">
+                <label className="AF text-gray-500 mt-8 md:mt-0 ">
+                  Select your type
+                </label>
+                <Select
+                  className="md:mt-4 sm:mt-2"
+                  options={gradeArray}
+                  defaultInputValue=""
+                  isClearable={isClearable}
+                  onChange={handleChangeGrade}
+                />
+              </div>
+            </div> */}
           </div>
           <div className="md:col-span-3 mt-10">
             <Scrollbars style={{ height: 700 }}>
