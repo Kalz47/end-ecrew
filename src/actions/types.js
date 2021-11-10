@@ -19,4 +19,4 @@ export const ADD_TYPE_FAIL = "ADD_TYPE_FAIL";
 export const GET_SALON_SUCCESS = "GET_SALON_SUCCESS";
 export const GET_SALON_ERROR = "GET_SALON_ERROR";
 
-export const PORT = "http://localhost:8000/api";
+export const PORT = "https://ecrew-back.herokuapp.com/api";
