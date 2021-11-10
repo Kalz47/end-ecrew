@@ -3,17 +3,12 @@ import { TimePicker } from "antd";
 import moment from "moment";
 import "antd/dist/antd.css";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllSalons, getLocations } from "../../../actions/salon";
-import { getLocations, addSalon, addNewLocation } from "../../../actions/salon";
-import {
-  getLocations,
-  addSalon,
-  addNewLocation,
-  getTypes,
-  addSalonType,
-} from "../../../actions/salon";
+import { getAllSalons } from "../../../actions/salon";
+import { addSalon, addNewLocation } from "../../../actions/salon";
+import { getLocations, getTypes, addSalonType } from "../../../actions/salon";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Link } from "react-router-dom";
 
 export default function AdminHome() {
   const [tab, setTab] = useState(0);
@@ -25,8 +20,6 @@ export default function AdminHome() {
   }, [dispatch]);
 
   console.log(salons, "admin form");
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getLocations());
@@ -448,10 +441,12 @@ export default function AdminHome() {
                           {salon.salonType}
                         </td>
                         <td className="text-center">
-                          <button class="bg-yellow-700 hover:bg-yellow-600 text-white font-bold py-1 px-2 rounded inline-flex items-center">
-                            <i className="fas fa-edit fill-current w-4 h-4 mr-2"></i>
-                            <span className="font-normal">Edit</span>
-                          </button>
+                          <Link to={`/adminEdit/${salon._id}`}>
+                            <button class="bg-yellow-700 hover:bg-yellow-600 text-white font-bold py-1 px-2 rounded inline-flex items-center">
+                              <i className="fas fa-edit fill-current w-4 h-4 mr-2"></i>
+                              <span className="font-normal">Edit</span>
+                            </button>
+                          </Link>
                         </td>
                         <td className="text-center py-1">
                           <button class="bg-red-700 hover:bg-red-600 text-white font-bold py-1 px-2 rounded inline-flex items-center">
@@ -467,6 +462,7 @@ export default function AdminHome() {
           </table>
         </div>
         <div>dffdf</div>
+      </div>
 
       <div className={`p-10 ${tab === 2 ? "block" : "hidden"}`}>
         <form onSubmit={handleTypeSubmit}>
@@ -499,7 +495,6 @@ export default function AdminHome() {
             </button>
           </div>{" "}
         </form>
-
       </div>
     </>
   );

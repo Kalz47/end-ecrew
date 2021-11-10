@@ -12,6 +12,8 @@ import {
   GET_TYPES_FAIL,
   ADD_TYPE_FAIL,
   ADD_TYPE_SUCCESS,
+  GET_SALON_SUCCESS,
+  GET_SALON_ERROR,
 } from "./types";
 import axios from "axios";
 
@@ -61,10 +63,11 @@ export const getLocations = () => async (dispatch) => {
       payload: res.data,
     });
   } catch (error) {
-    dispatch({
-      type: GET_LOCATIONS_FAIL,
-      payload: error.response,
-    });
+    // dispatch({
+    //   type: GET_LOCATIONS_FAIL,
+    //   payload: error.response,
+    // });
+    console.log("Error", error);
   }
 };
 
@@ -108,6 +111,21 @@ export const getTypes = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: GET_TYPES_FAIL,
+      payload: error.response,
+    });
+  }
+};
+
+export const getSingleSalon = (id) => async (dispatch) => {
+  try {
+    const res = await axios.get(`${PORT}/salon/${id}`);
+    dispatch({
+      type: GET_SALON_SUCCESS,
+      payload: res.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_SALON_ERROR,
       payload: error.response,
     });
   }

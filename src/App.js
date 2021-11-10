@@ -9,7 +9,6 @@ import AdminHome from "./Admin/Pages/AdminHome";
 import SalonEdit from "./Admin/Pages/SalonEdit";
 import Join from "./Client/Pages/Join";
 
-
 function App() {
   return (
     <>
@@ -20,7 +19,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/adminHome" element={<AdminHome />} />
-          <Route path="/adminEdit" element={<SalonEdit />} />
+          <Route path="/adminEdit/:id" element={<SalonEdit />} />
           <Route path="/join" element={<Join />} />
         </Routes>
         <Footer />
