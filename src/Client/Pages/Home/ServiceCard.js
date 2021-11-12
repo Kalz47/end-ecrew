@@ -1,19 +1,30 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Parking from "../../Components/logo/parking.png";
 import AirCond from "../../Components/logo/air-conditioner.png";
+import Card from "../../Components/logo/credit-card.png";
+
+import { PORT } from "../../../actions/types";
 
 export default function ServiceCard({ salon }) {
-  console.log(salon);
+  const [image, setImage] = useState("");
+
+  useEffect(() => {
+    setImage(`${PORT}/salon/image/${salon._id}`);
+  }, [salon._id]);
   return (
     <div className="w-full bg-white rounded-lg sahdow-lg overflow-hidden flex flex-col md:flex-row">
       <div className="w-full md:w-2/5 h-80">
-        <img
-          className="object-center object-cover w-full h-full"
-          src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80"
-          alt="photo"
-        />
+        {image ? (
+          <img
+            className="object-center object-cover w-full h-full"
+            src={image}
+            alt="photo"
+          />
+        ) : (
+          "No Image"
+        )}
       </div>
       <div className="w-full md:w-3/5 text-left p-6 md:p-4 space-y-2">
         <p className="text-3xl  font-bold AF text-blue-colour-dark">
@@ -126,6 +137,14 @@ export default function ServiceCard({ salon }) {
             <div>
               {" "}
               <img className="w-6 h-6" alt="Parking" src={Parking} />
+            </div>
+          ) : (
+            ""
+          )}
+          {salon.card ? (
+            <div>
+              {" "}
+              <img className="w-6 h-6" alt="Card" src={Card} />
             </div>
           ) : (
             ""
