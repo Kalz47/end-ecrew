@@ -7,6 +7,7 @@ import ContactUs from "./Client/Pages/ContactUs/index";
 import Footer from "./Client/Components/Footer";
 import AdminHome from "./Admin/Pages/AdminHome";
 import SalonEdit from "./Admin/Pages/SalonEdit";
+import Login from "./Admin/Pages/AdminHome/Login";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/adminHome" element={<AdminHome />} />
+          <Route path="/Login" element={<Login />} />
           <Route path="/adminEdit" element={<SalonEdit />} />
         </Routes>
         <Footer />
