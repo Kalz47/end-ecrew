@@ -428,6 +428,8 @@ export default function AdminHome() {
                 </th>
                 <th className="w-1/5 text-center text-gray-600 AF">Edit</th>
                 <th className="w-1/5 text-center text-gray-600 AF">Delete</th>
+                <th className="w-1/5 text-center text-gray-600 AF">Active</th>
+                <th className="w-1/5 text-center text-gray-600 AF">Deactive</th>
               </tr>
             </thead>
             <tbody>
@@ -460,6 +462,18 @@ export default function AdminHome() {
                           >
                             <i className="far fa-trash-alt fill-current w-4 h-4 mr-2"></i>
                             <span className="font-normal">Delete</span>
+                          </button>
+                        </td>
+                        <td className="text-center py-1">
+                          <button class="bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-2 rounded inline-flex items-center">
+                            <i className="far fa-trash-alt fill-current w-4 h-4 mr-2"></i>
+                            <span className="font-normal">Active</span>
+                          </button>
+                        </td>
+                        <td className="text-center py-1">
+                          <button class="bg-red-700 hover:bg-red-600 text-white font-bold py-1 px-2 rounded inline-flex items-center">
+                            <i className="far fa-trash-alt fill-current w-4 h-4 mr-2"></i>
+                            <span className="font-normal">Deactive</span>
                           </button>
                         </td>
                       </tr>{" "}
