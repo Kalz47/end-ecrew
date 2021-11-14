@@ -134,9 +134,12 @@ export default function Home() {
                                 searchKey.selectedOption.value.toLowerCase()
                               ) >= 0
                         )
-                        .map((salon) => (
-                          <ServiceCard key={salon._id} salon={salon} />
-                        ))
+                        .map(
+                          (salon) =>
+                            salon.active === 1 && (
+                              <ServiceCard key={salon._id} salon={salon} />
+                            )
+                        )
                     : searchKeyTwo &&
                       searchKeyTwo.selectedOption &&
                       searchKeyTwo.selectedOption.value
@@ -149,12 +152,18 @@ export default function Home() {
                                 searchKeyTwo.selectedOption.value.toLowerCase()
                               ) >= 0
                         )
-                        .map((salon) => (
-                          <ServiceCard key={salon._id} salon={salon} />
-                        ))
-                    : salons.map((salon) => (
-                        <ServiceCard key={salon._id} salon={salon} />
-                      ))
+                        .map(
+                          (salon) =>
+                            salon.active === 1 && (
+                              <ServiceCard key={salon._id} salon={salon} />
+                            )
+                        )
+                    : salons.map(
+                        (salon) =>
+                          salon.active === 1 && (
+                            <ServiceCard key={salon._id} salon={salon} />
+                          )
+                      )
                   : "Loading"}
               </div>
             </Scrollbars>
