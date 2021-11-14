@@ -19,4 +19,10 @@ export const ADD_TYPE_FAIL = "ADD_TYPE_FAIL";
 export const GET_SALON_SUCCESS = "GET_SALON_SUCCESS";
 export const GET_SALON_ERROR = "GET_SALON_ERROR";
 
+export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
+export const LOGIN_ERROR = "LOGIN_ERROR";
+
+export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
+export const LOGOUT_ERROR = "LOGOUT_ERROR";
+
 export const PORT = "http://localhost:8000/api";
