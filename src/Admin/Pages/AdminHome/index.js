@@ -11,11 +11,15 @@ import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { PORT } from "../../../actions/types";
+import { logout } from "../../../actions/auth";
 
 export default function AdminHome() {
   const [tab, setTab] = useState(0);
   const dispatch = useDispatch();
   const { salons, salonLoading } = useSelector((state) => state.salon);
+  // const [role, setRole] = useState("");
+
+  const role = localStorage.getItem("role");
 
   useEffect(() => {
     dispatch(getAllSalons());
@@ -119,6 +123,26 @@ export default function AdminHome() {
     }
   };
 
+  const handleLogout = () => {
+    dispatch(logout());
+  };
+
+  const handleActivate = async (id) => {
+    await axios.put(`${PORT}/salon/active/${id}`);
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  };
+
+  const handleDeactivate = async (id) => {
+    await axios.put(`${PORT}/salon/deactivate/${id}`);
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  };
+
+  console.log("role", role);
+
   return (
     <>
       <ToastContainer
@@ -158,6 +182,12 @@ export default function AdminHome() {
           className="py-2  px-6 border border-blue-500 hover:bg-blue-600 hover:text-white text-blue-500 rounded-md mt-4"
         >
           Add Salon Type
+        </button>
+        <button
+          onClick={handleLogout}
+          className="py-2  px-6 border border-blue-500 hover:bg-blue-600 hover:text-white text-blue-500 rounded-md mt-4"
+        >
+          Logout
         </button>
       </div>
       <div className={`${tab === 0 ? "block" : "hidden"}`}>
@@ -411,80 +441,95 @@ export default function AdminHome() {
         </form>
       </div>
 
-      <div className="md:grid md:grid-cols-2">
-        <div className="p-4 w-full">
-          <label for="name" className="bg-white text-gray-600 ml-16">
-            Salon List{" "}
-          </label>{" "}
-          <table className="table-auto w-full my-6">
-            <thead>
-              <tr>
-                <th className="w-1/5 text-center text-gray-600 AF">
-                  Salon name
-                </th>
-                <th className="w-1/5 text-center text-gray-600 AF">Location</th>
-                <th className="w-1/5 text-center text-gray-600 AF">
-                  Salon Type
-                </th>
-                <th className="w-1/5 text-center text-gray-600 AF">Edit</th>
-                <th className="w-1/5 text-center text-gray-600 AF">Delete</th>
-                <th className="w-1/5 text-center text-gray-600 AF">Active</th>
-                <th className="w-1/5 text-center text-gray-600 AF">Deactive</th>
-              </tr>
-            </thead>
-            <tbody>
-              {salonLoading && "There is no more salons"}
-              {salons && !salonLoading
-                ? salons.map((salon) => (
-                    <>
-                      <tr className="">
-                        <td className="text-center text-gray-600 AF">
-                          {salon.name}
-                        </td>
-                        <td className="text-center text-gray-600 AF">
-                          {salon.location}
-                        </td>
-                        <td className="text-center text-gray-600 AF">
-                          {salon.salonType}
-                        </td>
-                        <td className="text-center">
-                          <Link to={`/adminEdit/${salon._id}`}>
-                            <button class="bg-yellow-700 hover:bg-yellow-600 text-white font-bold py-1 px-2 rounded inline-flex items-center">
-                              <i className="fas fa-edit fill-current w-4 h-4 mr-2"></i>
-                              <span className="font-normal">Edit</span>
+      {/* Salon edit or delete */}
+      {role && (
+        <div className="md:grid md:grid-cols-2">
+          <div className="p-4 w-full">
+            <label for="name" className="bg-white text-gray-600 ml-16">
+              Salon List{" "}
+            </label>{" "}
+            <table className="table-auto w-full my-6">
+              <thead>
+                <tr>
+                  <th className="w-1/5 text-center text-gray-600 AF">
+                    Salon name
+                  </th>
+                  <th className="w-1/5 text-center text-gray-600 AF">
+                    Location
+                  </th>
+                  <th className="w-1/5 text-center text-gray-600 AF">
+                    Salon Type
+                  </th>
+                  <th className="w-1/5 text-center text-gray-600 AF">Edit</th>
+                  <th className="w-1/5 text-center text-gray-600 AF">Delete</th>
+                  <th className="w-1/5 text-center text-gray-600 AF">Active</th>
+                  <th className="w-1/5 text-center text-gray-600 AF">
+                    Deactive
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {salonLoading && "There is no more salons"}
+                {salons && !salonLoading
+                  ? salons.map((salon) => (
+                      <>
+                        <tr className="">
+                          <td className="text-center text-gray-600 AF">
+                            {salon.name}
+                          </td>
+                          <td className="text-center text-gray-600 AF">
+                            {salon.location}
+                          </td>
+                          <td className="text-center text-gray-600 AF">
+                            {salon.salonType}
+                          </td>
+                          <td className="text-center">
+                            <Link to={`/adminEdit/${salon._id}`}>
+                              <button class="bg-yellow-700 hover:bg-yellow-600 text-white font-bold py-1 px-2 rounded inline-flex items-center">
+                                <i className="fas fa-edit fill-current w-4 h-4 mr-2"></i>
+                                <span className="font-normal">Edit</span>
+                              </button>
+                            </Link>
+                          </td>
+                          <td className="text-center py-1">
+                            <button
+                              onClick={() => handleDelete(salon._id)}
+                              className="bg-red-700 hover:bg-red-600 text-white font-bold py-1 px-2 rounded inline-flex items-center"
+                            >
+                              <i className="far fa-trash-alt fill-current w-4 h-4 mr-2"></i>
+                              <span className="font-normal">Delete</span>
                             </button>
-                          </Link>
-                        </td>
-                        <td className="text-center py-1">
-                          <button
-                            onClick={() => handleDelete(salon._id)}
-                            className="bg-red-700 hover:bg-red-600 text-white font-bold py-1 px-2 rounded inline-flex items-center"
-                          >
-                            <i className="far fa-trash-alt fill-current w-4 h-4 mr-2"></i>
-                            <span className="font-normal">Delete</span>
-                          </button>
-                        </td>
-                        <td className="text-center py-1">
-                          <button class="bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-2 rounded inline-flex items-center">
-                            <i className="far fa-trash-alt fill-current w-4 h-4 mr-2"></i>
-                            <span className="font-normal">Active</span>
-                          </button>
-                        </td>
-                        <td className="text-center py-1">
-                          <button class="bg-red-700 hover:bg-red-600 text-white font-bold py-1 px-2 rounded inline-flex items-center">
-                            <i className="far fa-trash-alt fill-current w-4 h-4 mr-2"></i>
-                            <span className="font-normal">Deactive</span>
-                          </button>
-                        </td>
-                      </tr>{" "}
-                    </>
-                  ))
-                : "Loading"}
-            </tbody>
-          </table>
+                          </td>
+                          <td className="text-center py-1">
+                            {salon.active === 0 && (
+                              <button
+                                class="bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-2 rounded inline-flex items-center"
+                                onClick={() => handleActivate(salon._id)}
+                              >
+                                <span className="font-normal">Active</span>
+                              </button>
+                            )}
+                          </td>
+                          <td className="text-center py-1">
+                            {salon.active === 1 && (
+                              <button
+                                class="bg-red-700 hover:bg-red-600 text-white font-bold py-1 px-2 rounded inline-flex items-center"
+                                onClick={() => handleDeactivate(salon._id)}
+                              >
+                                <span className="font-normal">Deactive</span>
+                              </button>
+                            )}
+                          </td>
+                        </tr>{" "}
+                      </>
+                    ))
+                  : "Loading"}
+              </tbody>
+            </table>
+          </div>
+          <div></div>
         </div>
-        <div></div>
-      </div>
+      )}
 
       <div className={`p-10 ${tab === 2 ? "block" : "hidden"}`}>
         <form onSubmit={handleTypeSubmit}>

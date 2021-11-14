@@ -1,16 +1,32 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../../actions/auth";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [name, setName] = useState("adminns");
+  const [password, setPassword] = useState("adminns");
 
   const data = { name, password };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(loginUser(data));
+    setTimeout(() => {
+      navigate("/adminHome");
+    }, 1000);
+  };
 
   console.log(data);
   return (
     <div className="md:grid md:grid-cols-3 ">
       <div className="col-start-2 col-end-3 my-28 mx-4">
-        <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col"
+        >
           <div className="mb-4">
             <label
               className="block text-grey-darker text-sm font-bold mb-2"
@@ -43,10 +59,7 @@ export default function Login() {
             <p className="text-red text-xs italic">Please choose a password.</p>
           </div>
           <div className="flex items-center justify-between">
-            <button
-              className="bg-blue-500 hover:bg-blue-500-dark text-white font-bold py-2 px-4 rounded"
-              type="button"
-            >
+            <button className="bg-blue-500 hover:bg-blue-500-dark text-white font-bold py-2 px-4 rounded">
               Sign In
             </button>
           </div>
