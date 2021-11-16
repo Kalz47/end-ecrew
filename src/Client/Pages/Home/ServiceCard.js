@@ -42,6 +42,11 @@ export default function ServiceCard({ salon }) {
         <p className="text-base text-gray-400 font-normal AF">
           {salon.location}
         </p>
+        {salon.address && (
+          <p className="text-base text-gray-400 font-normal AF">
+            {salon.address}
+          </p>
+        )}
 
         <div class="flex flex-row ...">
           <svg

@@ -59,6 +59,7 @@ export default function AdminHome() {
   const [image, setImage] = useState("");
   const [addLocation, setAddLocation] = useState("");
   const [sType, setSType] = useState("");
+  const [address, setAddress] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -77,6 +78,7 @@ export default function AdminHome() {
     data.append("ac", ac);
     data.append("wifi", wifi);
     data.append("card", card);
+    data.append("address", address);
 
     image && data.append("image", image);
 
@@ -234,6 +236,27 @@ export default function AdminHome() {
                   name="contact"
                   value={contact}
                   onChange={(e) => setContact(e.target.value)}
+                  className="py-1 px-1 outline-none block h-full w-full"
+                />
+              </p>
+            </div>
+            <div className="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1">
+              <div className="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
+                <p>
+                  <label for="lastname" className="bg-white text-gray-600 px-1">
+                    Address *
+                  </label>
+                </p>
+              </div>
+              <p>
+                <input
+                  id="lastname"
+                  autocomplete="false"
+                  tabindex="0"
+                  type="text"
+                  name="contact"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
                   className="py-1 px-1 outline-none block h-full w-full"
                 />
               </p>
