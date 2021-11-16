@@ -23,7 +23,7 @@ export default function ServiceCard({ salon }) {
               <>
                 <span className="md:text-3xl text-lg text-gray-500"> | </span>
                 <span className="text-gray-500 md:text-xl text-sm">
-                  Grade {salon.grade}
+                  {/* Grade {salon.grade} */}
                 </span>
               </>
             ) : (
