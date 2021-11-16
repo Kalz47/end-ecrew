@@ -10,7 +10,7 @@ import { ADD_LOCATION_SUCCESS } from "../actions/types";
 const initialState = {
   locations: [],
   locationsLoading: true,
-  error: null,
+  locationError: null,
 };
 
 export default function (state = initialState, action) {
@@ -20,21 +20,21 @@ export default function (state = initialState, action) {
       return {
         locations: payload,
         locationLoading: false,
-        error: null,
+        locationError: null,
       };
     case GET_LOCATIONS_FAIL:
       return {
-        error: payload,
+        locationError: payload,
         locationLoading: false,
       };
     case ADD_LOCATION_SUCCESS:
       return {
-        error: payload,
+        locationError: payload,
         locationLoading: false,
       };
     case ADD_LOCATION_FAIL:
       return {
-        error: payload,
+        locationError: payload,
         locationLoading: false,
       };
 
