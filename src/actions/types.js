@@ -10,6 +10,8 @@ export const GET_LOCATIONS_FAIL = "GET_LOCATIONS_FAIL";
 export const ADD_LOCATION_SUCCESS = "ADD_LOCATION_SUCCESS";
 export const ADD_LOCATION_FAIL = "ADD_LOCATIONS_FAIL";
 
+
+export const PORT = "https://ecrew-back.herokuapp.com/api";
 export const GET_TYPES_SUCCESS = "GET_TYPES_SUCCESS";
 export const GET_TYPES_FAIL = "GET_TYPES_FAIL";
 
