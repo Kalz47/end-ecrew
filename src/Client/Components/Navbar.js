@@ -68,8 +68,10 @@ function Nav() {
               </div>
             </div>
             <div className="flex flex-row space-x-4">
-              <div className="text-gray-300">+94xxxxxxxxx</div>
-              <div className="text-gray-300">##########@gmail.com</div>
+              <div className="text-gray-300  hidden md:block">+94xxxxxxxxx</div>
+              <div className="text-gray-300  hidden md:block">
+                ##########@gmail.com
+              </div>
             </div>
             <div className="-mr-2 flex md:hidden">
               <button
