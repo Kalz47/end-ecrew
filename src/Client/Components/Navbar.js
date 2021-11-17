@@ -12,9 +12,9 @@ function Nav() {
   return (
     <div>
       <nav className="bg-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className=" mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center">
+            <div className="flex items-center ">
               <div className="flex-shrink-0">
                 <img className="h-8 w-8" src={Logo} alt="Workflow" />
               </div>
@@ -66,6 +66,10 @@ function Nav() {
                   </Link>
                 </div>
               </div>
+            </div>
+            <div className="flex flex-row space-x-4">
+              <div className="text-gray-300">+94xxxxxxxxx</div>
+              <div className="text-gray-300">##########@gmail.com</div>
             </div>
             <div className="-mr-2 flex md:hidden">
               <button

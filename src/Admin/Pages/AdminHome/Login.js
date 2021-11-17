@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [name, setName] = useState("adminns");
-  const [password, setPassword] = useState("adminns");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
 
   const data = { name, password };
 
