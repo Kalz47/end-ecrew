@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import React, { useEffect, useState } from "react";
 import ServiceCard from "./ServiceCard";
 import { Scrollbars } from "react-custom-scrollbars";
@@ -95,7 +96,7 @@ export default function Home() {
         }
       });
     setSearchKeyThree(sstype);
-  }, [searchKeyTwo]);
+  }, [searchKeyTwo, subTypes]);
   console.log(searchKeyThree);
 
   const subTypeArray = [];

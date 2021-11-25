@@ -1,8 +1,8 @@
+/* eslint-disable array-callback-return */
 import { TimePicker } from "antd";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  addSubType,
   getLocations,
   getSingleSalon,
   getSubTypes,
@@ -28,7 +28,7 @@ export default function SalonEdit(props) {
   }, [dispatch, id]);
 
   const { locations } = useSelector((state) => state.location);
-  const { types, typeError, subTypes } = useSelector((state) => state.type);
+  const { types, subTypes } = useSelector((state) => state.type);
   const { salon, salonLoading } = useSelector((state) => state.salon);
 
   const [name, setName] = useState();
@@ -111,7 +111,7 @@ export default function SalonEdit(props) {
         }
       });
     setSubTypeMap(sstype);
-  }, [salonType]);
+  }, [salonType, subTypes]);
 
   console.log("edit sub", salonSubType);
   return (

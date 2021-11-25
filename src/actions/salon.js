@@ -135,7 +135,7 @@ export const getSingleSalon = (id) => async (dispatch) => {
 
 export const addSubType = (data) => async (dispatch) => {
   try {
-    const res = await axios.post(`${PORT}/subType`, data);
+    await axios.post(`${PORT}/subType`, data);
     dispatch({
       type: ADD_SUB_TYPE_SUCCESS,
     });

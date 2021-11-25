@@ -1,3 +1,5 @@
+/* eslint-disable array-callback-return */
+
 import React, { useEffect, useState } from "react";
 import { TimePicker } from "antd";
 import moment from "moment";
@@ -49,7 +51,7 @@ export default function AdminHome() {
 
   useEffect(() => {
     setSalonType(types && !typeLoading && types[0].name);
-  }, []);
+  }, [typeLoading, types]);
   const [contact, setContact] = useState("");
 
   const [openTime, setOpen] = useState("");
@@ -175,7 +177,7 @@ export default function AdminHome() {
         }
       });
     setSubTypeMap(sstype);
-  }, [salonType, subMain]);
+  }, [salonType, subMain, subTypes]);
 
   console.log("role", subTypeMap);
 
