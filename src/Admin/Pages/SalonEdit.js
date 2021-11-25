@@ -1,7 +1,13 @@
 import { TimePicker } from "antd";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getLocations, getSingleSalon, getTypes } from "../../actions/salon";
+import {
+  addSubType,
+  getLocations,
+  getSingleSalon,
+  getSubTypes,
+  getTypes,
+} from "../../actions/salon";
 
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -18,10 +24,11 @@ export default function SalonEdit(props) {
     dispatch(getSingleSalon(id));
     dispatch(getLocations());
     dispatch(getTypes());
+    dispatch(getSubTypes());
   }, [dispatch, id]);
 
   const { locations } = useSelector((state) => state.location);
-  const { types } = useSelector((state) => state.type);
+  const { types, typeError, subTypes } = useSelector((state) => state.type);
   const { salon, salonLoading } = useSelector((state) => state.salon);
 
   const [name, setName] = useState();
@@ -40,6 +47,9 @@ export default function SalonEdit(props) {
   const [address, setAddress] = useState("");
 
   const [image, setImage] = useState("");
+  const [description, setDescription] = useState("");
+  const [salonSubType, setSalonSubType] = useState("");
+  const [subTypeMap, setSubTypeMap] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -59,6 +69,8 @@ export default function SalonEdit(props) {
     data.append("wifi", wifi);
     data.append("card", card);
     data.append("address", address);
+    data.append("description", description);
+    data.append("salonSubType", salonSubType);
 
     image && data.append("image", image);
 
@@ -85,9 +97,23 @@ export default function SalonEdit(props) {
       setParking(salon.parking);
       setCard(salon.card);
       setAddress(salon.address);
+      setDescription(salon.description);
+      setSalonSubType(salon.salonSubType);
     }
   }, [salon, salonLoading, id]);
 
+  useEffect(() => {
+    const sstype = [];
+    subTypes &&
+      subTypes.map((s) => {
+        if (s.subMain === salonType) {
+          sstype.push(s.subType);
+        }
+      });
+    setSubTypeMap(sstype);
+  }, [salonType]);
+
+  console.log("edit sub", salonSubType);
   return (
     <div>
       <form onSubmit={handleSubmit} className="bg-white shadow rounded-lg p-6">
@@ -130,6 +156,27 @@ export default function SalonEdit(props) {
                 name="contact"
                 value={contact}
                 onChange={(e) => setContact(e.target.value)}
+                className="py-1 px-1 outline-none block h-full w-full"
+              />
+            </p>
+          </div>
+          <div className="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1">
+            <div className="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
+              <p>
+                <label for="lastname" className="bg-white text-gray-600 px-1">
+                  Description *
+                </label>
+              </p>
+            </div>
+            <p>
+              <input
+                id="lastname"
+                autocomplete="false"
+                tabindex="0"
+                type="text"
+                name="contact"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 className="py-1 px-1 outline-none block h-full w-full"
               />
             </p>
@@ -215,6 +262,26 @@ export default function SalonEdit(props) {
                   types.map((type) => (
                     <option key={type._id} value={type.sType}>
                       {type.sType}
+                    </option>
+                  ))}
+              </select>
+            </div>
+            <div className=" mt-6  relative w-64 flex justify-start">
+              <div className="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
+                <p>
+                  <label for="username" className="bg-white text-gray-600 px-1">
+                    Sub Type *
+                  </label>
+                </p>
+              </div>
+              <select
+                onChange={(e) => setSalonSubType(e.target.value)}
+                className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+              >
+                {subTypeMap &&
+                  subTypeMap.map((type) => (
+                    <option key={type} value={type}>
+                      {type}
                     </option>
                   ))}
               </select>

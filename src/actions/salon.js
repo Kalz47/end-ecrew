@@ -14,6 +14,9 @@ import {
   ADD_TYPE_SUCCESS,
   GET_SALON_SUCCESS,
   GET_SALON_ERROR,
+  ADD_SUB_TYPE_FAIL,
+  ADD_SUB_TYPE_SUCCESS,
+  GET_SUB_TYPES_SUCCESS,
 } from "./types";
 import axios from "axios";
 
@@ -125,6 +128,36 @@ export const getSingleSalon = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: GET_SALON_ERROR,
+      payload: error.response,
+    });
+  }
+};
+
+export const addSubType = (data) => async (dispatch) => {
+  try {
+    const res = await axios.post(`${PORT}/subType`, data);
+    dispatch({
+      type: ADD_SUB_TYPE_SUCCESS,
+    });
+  } catch (err) {
+    dispatch({
+      type: ADD_SUB_TYPE_FAIL,
+      payload: err.response,
+    });
+  }
+};
+
+export const getSubTypes = () => async (dispatch) => {
+  try {
+    const res = await axios.get(`${PORT}/subType`);
+    console.log(res);
+    dispatch({
+      type: GET_SUB_TYPES_SUCCESS,
+      payload: res.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_SUB_TYPES_SUCCESS,
       payload: error.response,
     });
   }

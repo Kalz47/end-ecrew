@@ -25,5 +25,11 @@ export const LOGIN_ERROR = "LOGIN_ERROR";
 export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
 export const LOGOUT_ERROR = "LOGOUT_ERROR";
 
+export const GET_SUB_TYPES_SUCCESS = "GET_SUB_TYPES_SUCCESS";
+export const GET_SUB_TYPES_FAIL = "GET_SUB_TYPES_FAIL";
+
+export const ADD_SUB_TYPE_SUCCESS = "ADD_SUB_TYPE_SUCCESS";
+export const ADD_SUB_TYPE_FAIL = "ADD_SUB_TYPE_FAIL";
+
 export const PORT = "https://ecrew-back.herokuapp.com/api";
 // export const PORT = "http://localhost:8000/api";

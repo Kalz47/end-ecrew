@@ -3,7 +3,7 @@ import { TimePicker } from "antd";
 import moment from "moment";
 import "antd/dist/antd.css";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllSalons } from "../../../actions/salon";
+import { addSubType, getAllSalons, getSubTypes } from "../../../actions/salon";
 import { addSalon, addNewLocation } from "../../../actions/salon";
 import { getLocations, getTypes, addSalonType } from "../../../actions/salon";
 import { ToastContainer, toast } from "react-toastify";
@@ -30,21 +30,26 @@ export default function AdminHome() {
   useEffect(() => {
     dispatch(getLocations());
     dispatch(getTypes());
+    dispatch(getSubTypes());
   }, [dispatch]);
 
   const { addSalonSuc, error } = useSelector((state) => state.salon);
   const { locations, locationsLoading, locationError } = useSelector(
     (state) => state.location
   );
-  const { types, typeLoading, typeError } = useSelector((state) => state.type);
+  const { types, typeLoading, typeError, subTypes } = useSelector(
+    (state) => state.type
+  );
 
   const [name, setName] = useState("");
   const [location, setLocation] = useState(
     locations && !locationsLoading ? locations[0].name : ""
   );
-  const [salonType, setSalonType] = useState(
-    types && !typeLoading ? types[0].name : ""
-  );
+  const [salonType, setSalonType] = useState("");
+
+  useEffect(() => {
+    setSalonType(types && !typeLoading && types[0].name);
+  }, []);
   const [contact, setContact] = useState("");
 
   const [openTime, setOpen] = useState("");
@@ -60,6 +65,16 @@ export default function AdminHome() {
   const [addLocation, setAddLocation] = useState("");
   const [sType, setSType] = useState("");
   const [address, setAddress] = useState("");
+  const [createSubType, setCreateSubType] = useState({
+    subMain: "",
+    subType: "",
+  });
+  const [subTypeMap, setSubTypeMap] = useState([]);
+
+  const [description, setDescription] = useState("");
+  const [salonSubType, setSalonSubType] = useState("");
+
+  const { subMain, subType } = createSubType;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -79,6 +94,8 @@ export default function AdminHome() {
     data.append("wifi", wifi);
     data.append("card", card);
     data.append("address", address);
+    data.append("description", description);
+    data.append("salonSubType", salonSubType);
 
     image && data.append("image", image);
 
@@ -101,6 +118,7 @@ export default function AdminHome() {
 
     const data = { addLocation };
     dispatch(addNewLocation(data));
+    window.location.reload();
   };
 
   const handleTypeSubmit = (e) => {
@@ -143,7 +161,23 @@ export default function AdminHome() {
     }, 1000);
   };
 
-  console.log("role", role);
+  const handleSubType = async (e) => {
+    e.preventDefault();
+    dispatch(addSubType(createSubType));
+  };
+
+  useEffect(() => {
+    const sstype = [];
+    subTypes &&
+      subTypes.map((s) => {
+        if (s.subMain === salonType) {
+          sstype.push(s.subType);
+        }
+      });
+    setSubTypeMap(sstype);
+  }, [salonType, subMain]);
+
+  console.log("role", subTypeMap);
 
   return (
     <>
@@ -184,6 +218,12 @@ export default function AdminHome() {
           className="py-2  px-6 border border-blue-500 hover:bg-blue-600 hover:text-white text-blue-500 rounded-md mt-4"
         >
           Add Salon Type
+        </button>
+        <button
+          onClick={() => setTab(3)}
+          className="py-2  px-6 border border-blue-500 hover:bg-blue-600 hover:text-white text-blue-500 rounded-md mt-4"
+        >
+          Add Salon Sub Type
         </button>
         <button
           onClick={handleLogout}
@@ -244,6 +284,27 @@ export default function AdminHome() {
               <div className="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
                 <p>
                   <label for="lastname" className="bg-white text-gray-600 px-1">
+                    Description *
+                  </label>
+                </p>
+              </div>
+              <p>
+                <input
+                  id="lastname"
+                  autocomplete="false"
+                  tabindex="0"
+                  type="text"
+                  name="contact"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  className="py-1 px-1 outline-none block h-full w-full"
+                />
+              </p>
+            </div>
+            <div className="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1">
+              <div className="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
+                <p>
+                  <label for="lastname" className="bg-white text-gray-600 px-1">
                     Address *
                   </label>
                 </p>
@@ -278,7 +339,7 @@ export default function AdminHome() {
                   name="grade"
                   value={grade}
                   onChange={(e) => setGrade(e.target.value)}
-                  className="py-1 px-1 outline-none block h-full w-full"
+                  className="py-1 px-1 outline-none block h-6 w-full "
                 />
               </p>
             </div>
@@ -327,6 +388,29 @@ export default function AdminHome() {
                     types.map((type) => (
                       <option key={type._id} value={type.sType}>
                         {type.sType}
+                      </option>
+                    ))}
+                </select>
+              </div>
+              <div className=" mt-6  relative w-64 flex justify-start">
+                <div className="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
+                  <p>
+                    <label
+                      for="username"
+                      className="bg-white text-gray-600 px-1"
+                    >
+                      Sub Type *
+                    </label>
+                  </p>
+                </div>
+                <select
+                  onChange={(e) => setSalonSubType(e.target.value)}
+                  className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+                >
+                  {subTypeMap &&
+                    subTypeMap.map((type) => (
+                      <option key={type} value={type}>
+                        {type}
                       </option>
                     ))}
                 </select>
@@ -412,7 +496,7 @@ export default function AdminHome() {
                   className="form-checkbox h-5 w-5 text-gray-600"
                   onChange={(e) => setWifi(e.target.checked)}
                 />
-                <span className="ml-2 text-gray-700">Wifi</span>
+                <span className="ml-2 text-gray-700">Delivery</span>
               </label>
               <label className="inline-flex items-center mt-3">
                 <input
@@ -465,7 +549,7 @@ export default function AdminHome() {
       </div>
 
       {/* Salon edit or delete */}
-      {role && (
+      {role && tab === 0 && (
         <div className="md:grid md:grid-cols-2">
           <div className="p-4 w-full">
             <label for="name" className="bg-white text-gray-600 ml-16">
@@ -573,6 +657,67 @@ export default function AdminHome() {
                 className="py-1 px-1 text-gray-900 outline-none block h-full w-full"
                 value={sType}
                 onChange={(e) => setSType(e.target.value)}
+              />
+            </p>
+          </div>
+          <div className="border-t mt-6 pt-3">
+            <button
+              // onChange={handleSubmit}
+              className="rounded text-gray-100 px-3 py-1 bg-blue-500 hover:shadow-inner hover:bg-blue-700 transition-all duration-300"
+            >
+              Save
+            </button>
+          </div>{" "}
+        </form>
+      </div>
+
+      {/* create a subType */}
+      <div className={`p-10 ${tab === 3 ? "block" : "hidden"}`}>
+        <form onSubmit={handleSubType}>
+          <div className="inline-block relative w-64">
+            <div className="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
+              <p>
+                <label for="username" className="bg-white text-gray-600 px-1">
+                  Type *
+                </label>
+              </p>
+            </div>
+            <select
+              onChange={(e) =>
+                setCreateSubType({ ...createSubType, subMain: e.target.value })
+              }
+              className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+            >
+              {types &&
+                types.map((type) => (
+                  <option key={type._id} value={type.sType}>
+                    {type.sType}
+                  </option>
+                ))}
+            </select>
+          </div>
+          <div className="mt-10 border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1 w-40">
+            <div className="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
+              <p>
+                <label for="name" className="bg-white text-gray-600 px-1">
+                  Salon Sub Type *
+                </label>
+              </p>
+            </div>
+            <p>
+              <input
+                id="name"
+                autocomplete="false"
+                tabindex="0"
+                type="text"
+                className="py-1 px-1 text-gray-900 outline-none block h-full w-full"
+                value={subType}
+                onChange={(e) =>
+                  setCreateSubType({
+                    ...createSubType,
+                    subType: e.target.value,
+                  })
+                }
               />
             </p>
           </div>

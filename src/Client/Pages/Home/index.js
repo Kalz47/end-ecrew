@@ -5,18 +5,24 @@ import Container from "../../Components/Container";
 import Category from "./Category";
 import Select from "react-select";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllSalons, getLocations, getTypes } from "../../../actions/salon";
+import {
+  getAllSalons,
+  getLocations,
+  getSubTypes,
+  getTypes,
+} from "../../../actions/salon";
 import ServiceImage from "../../Components/logo/salon-working-01.png";
 
 export default function Home() {
   const dispatch = useDispatch();
   const { salons, salonLoading } = useSelector((state) => state.salon);
   const { locations } = useSelector((state) => state.location);
-  const { types } = useSelector((state) => state.type);
+  const { types, subTypes } = useSelector((state) => state.type);
 
   const [searchKey, setSearchKey] = useState("");
   const [searchKeyTwo, setSearchKeyTwo] = useState("");
-  // const [searchKeyThree, setSearchKeyThree] = useState("");
+  const [searchKeyThree, setSearchKeyThree] = useState("");
+  const [searchKeyThreeNew, setSearchKeyThreeNew] = useState("");
 
   const [isClearable] = useState(true);
 
@@ -29,6 +35,7 @@ export default function Home() {
   useEffect(() => {
     dispatch(getLocations());
     dispatch(getTypes());
+    dispatch(getSubTypes());
   }, [dispatch]);
 
   locations &&
@@ -42,6 +49,10 @@ export default function Home() {
 
   const handleChangeType = (selectedOption) => {
     setSearchKeyTwo({ selectedOption });
+  };
+
+  const handleChangeSubType = (selectedOption) => {
+    setSearchKeyThreeNew({ selectedOption });
   };
   const typeArray = [];
 
@@ -68,6 +79,31 @@ export default function Home() {
   // const handleChangeGrade = (selectedOption) => {
   //   setSearchKeyThree({ selectedOption });
   // };
+
+  useEffect(() => {
+    let sstype = [];
+    subTypes &&
+      searchKeyTwo &&
+      searchKeyTwo.selectedOption &&
+      searchKeyTwo.selectedOption.value &&
+      subTypes.map((s) => {
+        if (
+          searchKeyTwo.selectedOption.value &&
+          s.subMain === searchKeyTwo.selectedOption.value
+        ) {
+          sstype.push(s.subType);
+        }
+      });
+    setSearchKeyThree(sstype);
+  }, [searchKeyTwo]);
+  console.log(searchKeyThree);
+
+  const subTypeArray = [];
+
+  searchKeyThree &&
+    searchKeyThree.map((st) => subTypeArray.push({ value: st, label: st }));
+
+  console.log("KEY 3", searchKeyThreeNew);
 
   return (
     <Container className="h-screen">
@@ -99,6 +135,20 @@ export default function Home() {
                   defaultInputValue=""
                   isClearable={isClearable}
                   onChange={handleChangeType}
+                />
+              </div>
+            </div>
+            <div className="md:pb-4">
+              <div className="md:border-r border-gray-200 h-full px-4 ">
+                <label className="AF text-gray-500 mt-8 md:mt-0 ">
+                  Select your sub type
+                </label>
+                <Select
+                  className="md:mt-4 sm:mt-2"
+                  options={subTypeArray}
+                  defaultInputValue=""
+                  isClearable={isClearable}
+                  onChange={handleChangeSubType}
                 />
               </div>
             </div>
@@ -150,6 +200,24 @@ export default function Home() {
                               .toLowerCase()
                               .indexOf(
                                 searchKeyTwo.selectedOption.value.toLowerCase()
+                              ) >= 0
+                        )
+                        .map(
+                          (salon) =>
+                            salon.active === 1 && (
+                              <ServiceCard key={salon._id} salon={salon} />
+                            )
+                        )
+                    : searchKeyThreeNew &&
+                      searchKeyThreeNew.selectedOption &&
+                      searchKeyThreeNew.selectedOption.value
+                    ? salons
+                        .filter(
+                          (salon) =>
+                            salon.salonSubType
+                              .toLowerCase()
+                              .indexOf(
+                                searchKeyThreeNew.selectedOption.value.toLowerCase()
                               ) >= 0
                         )
                         .map(
