@@ -120,7 +120,9 @@ export default function AdminHome() {
 
     const data = { addLocation };
     dispatch(addNewLocation(data));
-    window.location.reload();
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
   };
 
   const handleTypeSubmit = (e) => {
@@ -482,7 +484,7 @@ export default function AdminHome() {
                   className="form-checkbox h-5 w-5 text-gray-600"
                   onChange={(e) => setAc(e.target.checked)}
                 />
-                <span className="ml-2 text-gray-700">A/C</span>
+                <span className="ml-2 text-gray-700">24 Service</span>
               </label>
               <label className="inline-flex items-center mt-3">
                 <input

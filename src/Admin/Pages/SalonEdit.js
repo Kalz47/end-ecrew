@@ -352,7 +352,7 @@ export default function SalonEdit(props) {
                 onChange={(e) => setAc(e.target.checked)}
                 checked={ac}
               />
-              <span className="ml-2 text-gray-700">A/C</span>
+              <span className="ml-2 text-gray-700">24 hours</span>
             </label>
             <label className="inline-flex items-center mt-3">
               <input
@@ -370,7 +370,7 @@ export default function SalonEdit(props) {
                 onChange={(e) => setWifi(e.target.checked)}
                 checked={wifi}
               />
-              <span className="ml-2 text-gray-700">Wifi</span>
+              <span className="ml-2 text-gray-700">Delivery</span>
             </label>
             <label className="inline-flex items-center mt-3">
               <input

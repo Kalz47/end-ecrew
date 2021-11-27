@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useEffect, useState } from "react";
 import Parking from "../../Components/logo/ParkingNew.png";
-import AirCond from "../../Components/logo/ACnew.png";
+import AirCond from "../../Components/logo/24-hours.png";
 import Card from "../../Components/logo/credit-card.png";
 import Delivery from "../../Components/logo/Delivery.png";
 
