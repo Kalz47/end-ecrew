@@ -111,7 +111,7 @@ export default function AdminHome() {
       toast.success(addSalonSuc);
       setTimeout(() => {
         window.location.reload();
-      }, 1500);
+      }, 2000);
     }
   }, [error, addSalonSuc]);
 
@@ -179,6 +179,7 @@ export default function AdminHome() {
         }
       });
     setSubTypeMap(sstype);
+    setSalonSubType(sstype[0]);
   }, [salonType, subMain, subTypes]);
 
   console.log("role", subTypeMap);
