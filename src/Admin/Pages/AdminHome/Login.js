@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../../actions/auth";
 import { useNavigate } from "react-router-dom";
@@ -16,8 +16,13 @@ export default function Login() {
     dispatch(loginUser(data));
     setTimeout(() => {
       navigate("/adminHome");
-    }, 1000);
+    }, 1);
   };
+
+  useEffect(() => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+  }, []);
 
   console.log(data);
   return (

@@ -39,9 +39,7 @@ export default function AdminHome() {
   const { locations, locationsLoading, locationError } = useSelector(
     (state) => state.location
   );
-  const { types, typeLoading, typeError, subTypes } = useSelector(
-    (state) => state.type
-  );
+  const { types, typeError, subTypes } = useSelector((state) => state.type);
 
   const [name, setName] = useState("");
   const [location, setLocation] = useState(
@@ -49,9 +47,9 @@ export default function AdminHome() {
   );
   const [salonType, setSalonType] = useState("");
 
-  useEffect(() => {
-    setSalonType(types && !typeLoading && types[0].name);
-  }, [typeLoading, types]);
+  // useEffect(() => {
+  //   setSalonType(types && !typeLoading && types[0].name && types[0].name);
+  // }, [typeLoading, types]);
   const [contact, setContact] = useState("");
 
   const [openTime, setOpen] = useState("");
@@ -75,6 +73,7 @@ export default function AdminHome() {
 
   const [description, setDescription] = useState("");
   const [salonSubType, setSalonSubType] = useState("");
+  const [verified, setVerified] = useState(false);
 
   const { subMain, subType } = createSubType;
 
@@ -98,6 +97,7 @@ export default function AdminHome() {
     data.append("address", address);
     data.append("description", description);
     data.append("salonSubType", salonSubType);
+    data.append("verified", verified);
 
     image && data.append("image", image);
 
@@ -132,7 +132,7 @@ export default function AdminHome() {
     dispatch(addSalonType(data));
     setTimeout(() => {
       window.location.reload();
-    });
+    }, 1000);
   };
 
   const handleDelete = async (id) => {
@@ -510,6 +510,14 @@ export default function AdminHome() {
                   onChange={(e) => setCard(e.target.checked)}
                 />
                 <span className="ml-2 text-gray-700">Card</span>
+              </label>
+              <label className="inline-flex items-center mt-3">
+                <input
+                  type="checkbox"
+                  className="form-checkbox h-5 w-5 text-gray-600"
+                  onChange={(e) => setVerified(e.target.checked)}
+                />
+                <span className="ml-2 text-gray-700">Verified</span>
               </label>
             </div>
           </div>

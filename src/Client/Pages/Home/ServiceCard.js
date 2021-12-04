@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import Parking from "../../Components/logo/ParkingNew.png";
 import AirCond from "../../Components/logo/24-hours.png";
 import Card from "../../Components/logo/credit-card.png";
-import Delivery from "../../Components/logo/Delivery.png";
+// import Delivery from "../../Components/logo/Delivery.png";
 
 import { PORT } from "../../../actions/types";
 
@@ -15,7 +15,7 @@ export default function ServiceCard({ salon }) {
     setImage(`${PORT}/salon/image/${salon._id}`);
   }, [salon._id]);
   return (
-    <div className="w-full md:h-auto h-48 bg-white rounded-lg sahdow-lg overflow-hidden flex flex-row">
+    <div className="w-full md:h-auto h-56 bg-white rounded-lg sahdow-lg overflow-hidden flex flex-row">
       <div className="w-2/5 h-full">
         <img
           className="object-center object-cover w-full h-full"
@@ -157,11 +157,15 @@ export default function ServiceCard({ salon }) {
         ) : (
           ""
         )}
+        {salon.verified && (
+          <div className="AF font-semibold bg-green-500 w-16 text-center text-sm text-white rounded-lg mt-2">
+            <div>Verified</div>
+          </div>
+        )}
         <div className="flex justify-start space-x-4 pt-2">
           {salon.wifi ? (
-            <div>
-              {" "}
-              <img className="w-6 h-6" alt="AirCond" src={Delivery} />
+            <div className="AF font-semibold bg-green-500 w-16 text-center text-sm text-white rounded-lg mt-2">
+              <div>Delivery</div>
             </div>
           ) : (
             ""
