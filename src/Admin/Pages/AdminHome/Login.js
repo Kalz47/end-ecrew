@@ -16,7 +16,7 @@ export default function Login() {
     dispatch(loginUser(data));
     setTimeout(() => {
       navigate("/adminHome");
-    }, 1);
+    }, 2000);
   };
 
   useEffect(() => {

@@ -20,11 +20,13 @@ export default function (state = initialState, action) {
 
   switch (type) {
     case LOGIN_SUCCESS:
+      localStorage.setItem("token", payload.token);
+      payload.user.role === 1 && localStorage.setItem("role", 1);
       return {
         ...state,
         isAuthenticated: true,
         authLoading: false,
-        user: payload,
+        user: payload.user,
       };
     case LOGIN_ERROR:
       return {

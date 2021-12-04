@@ -7,17 +7,17 @@ import {
 } from "./types";
 import axios from "axios";
 
-export const loginUser = (data) => async (dispatch, getState) => {
+export const loginUser = (data) => async (dispatch, history) => {
   const res = await axios.post(`${PORT}/login`, data);
   console.log(res.data);
 
   try {
     dispatch({
       type: LOGIN_SUCCESS,
-      payload: res.data.user,
+      payload: res.data,
     });
+    // history.push("/adminHome");
     localStorage.setItem("token", res.data.token);
-
     res.data.user.role === 1 && localStorage.setItem("role", 1);
   } catch (error) {
     dispatch({
