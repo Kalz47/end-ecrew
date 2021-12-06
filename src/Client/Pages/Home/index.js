@@ -97,7 +97,6 @@ export default function Home() {
       });
     setSearchKeyThree(sstype);
   }, [searchKeyTwo, subTypes]);
-  console.log(searchKeyThree);
 
   const subTypeArray = [];
 
@@ -105,6 +104,8 @@ export default function Home() {
     searchKeyThree.map((st) => subTypeArray.push({ value: st, label: st }));
 
   console.log("KEY 3", searchKeyThreeNew);
+  console.log("KEY 2", searchKeyTwo);
+  console.log("KEY 1", searchKey);
 
   return (
     <Container className="h-screen">
@@ -173,67 +174,163 @@ export default function Home() {
               <div className="space-y-4 px-4">
                 <Category />
                 {salons && !salonLoading
-                  ? searchKey &&
-                    searchKey.selectedOption &&
-                    searchKey.selectedOption.value
-                    ? salons
-                        .filter(
-                          (salon) =>
-                            salon.location
-                              .toLowerCase()
-                              .indexOf(
-                                searchKey.selectedOption.value.toLowerCase()
-                              ) >= 0
+                  ? (!searchKey || searchKey.selectedOption === null) &&
+                    (!searchKeyTwo || searchKeyTwo.selectedOption === null) &&
+                    (!searchKeyThreeNew ||
+                      searchKeyThreeNew.selectedOption === null) &&
+                    salons.map(
+                      (salon) =>
+                        salon.active === 1 && (
+                          <ServiceCard key={salon._id} salon={salon} />
                         )
-                        .map(
-                          (salon) =>
-                            salon.active === 1 && (
-                              <ServiceCard key={salon._id} salon={salon} />
-                            )
-                        )
-                    : searchKeyTwo &&
-                      searchKeyTwo.selectedOption &&
-                      searchKeyTwo.selectedOption.value
-                    ? salons
-                        .filter(
-                          (salon) =>
-                            salon.salonType
-                              .toLowerCase()
-                              .indexOf(
-                                searchKeyTwo.selectedOption.value.toLowerCase()
-                              ) >= 0
-                        )
-                        .map(
-                          (salon) =>
-                            salon.active === 1 && (
-                              <ServiceCard key={salon._id} salon={salon} />
-                            )
-                        )
-                    : searchKeyThreeNew &&
-                      searchKeyThreeNew.selectedOption &&
-                      searchKeyThreeNew.selectedOption.value
-                    ? salons
-                        .filter(
-                          (salon) =>
-                            salon.salonSubType
-                              .toLowerCase()
-                              .indexOf(
-                                searchKeyThreeNew.selectedOption.value.toLowerCase()
-                              ) >= 0
-                        )
-                        .map(
-                          (salon) =>
-                            salon.active === 1 && (
-                              <ServiceCard key={salon._id} salon={salon} />
-                            )
-                        )
-                    : salons.map(
-                        (salon) =>
-                          salon.active === 1 && (
-                            <ServiceCard key={salon._id} salon={salon} />
-                          )
-                      )
+                    )
                   : "Loading"}
+
+                {salons &&
+                  !salonLoading &&
+                  searchKey &&
+                  searchKey.selectedOption &&
+                  searchKey.selectedOption.value &&
+                  (!searchKeyTwo || searchKeyTwo.selectedOption === null) &&
+                  (!searchKeyThreeNew ||
+                    searchKeyThreeNew.selectedOption === null) &&
+                  salons
+                    .filter(
+                      (salon) =>
+                        salon.location
+                          .toLowerCase()
+                          .indexOf(
+                            searchKey.selectedOption.value.toLowerCase()
+                          ) >= 0
+                    )
+                    .map(
+                      (salon) =>
+                        salon.active === 1 && (
+                          <ServiceCard key={salon._id} salon={salon} />
+                        )
+                    )}
+
+                {salons &&
+                  !salonLoading &&
+                  searchKeyTwo &&
+                  searchKeyTwo.selectedOption &&
+                  searchKeyTwo.selectedOption.value &&
+                  (!searchKey || searchKey.selectedOption === null) &&
+                  (!searchKeyThreeNew ||
+                    searchKeyThreeNew.selectedOption === null) &&
+                  salons
+                    .filter(
+                      (salon) =>
+                        salon.salonType
+                          .toLowerCase()
+                          .indexOf(
+                            searchKeyTwo.selectedOption.value.toLowerCase()
+                          ) >= 0
+                    )
+                    .map(
+                      (salon) =>
+                        salon.active === 1 && (
+                          <ServiceCard key={salon._id} salon={salon} />
+                        )
+                    )}
+
+                {salons &&
+                  !salonLoading &&
+                  searchKeyTwo &&
+                  searchKeyTwo.selectedOption &&
+                  searchKeyTwo.selectedOption.value &&
+                  searchKeyThreeNew &&
+                  searchKeyThreeNew.selectedOption &&
+                  searchKeyThreeNew.selectedOption.value &&
+                  (!searchKey || searchKey.selectedOption === null) &&
+                  salons
+                    .filter(
+                      (salon) =>
+                        salon.salonType
+                          .toLowerCase()
+                          .indexOf(
+                            searchKeyTwo.selectedOption.value.toLowerCase()
+                          ) >= 0 &&
+                        salon.salonSubType
+                          .toLowerCase()
+                          .indexOf(
+                            searchKeyThreeNew.selectedOption.value.toLowerCase()
+                          ) >= 0
+                    )
+                    .map(
+                      (salon) =>
+                        salon.active === 1 && (
+                          <ServiceCard key={salon._id} salon={salon} />
+                        )
+                    )}
+
+                {salons &&
+                  !salonLoading &&
+                  searchKeyTwo &&
+                  searchKeyTwo.selectedOption &&
+                  searchKeyTwo.selectedOption.value &&
+                  searchKey &&
+                  searchKey.selectedOption &&
+                  searchKey.selectedOption.value &&
+                  (!searchKeyThreeNew ||
+                    searchKeyThreeNew.selectedOption === null) &&
+                  salons
+                    .filter(
+                      (salon) =>
+                        salon.salonType
+                          .toLowerCase()
+                          .indexOf(
+                            searchKeyTwo.selectedOption.value.toLowerCase()
+                          ) >= 0 &&
+                        salon.location
+                          .toLowerCase()
+                          .indexOf(
+                            searchKey.selectedOption.value.toLowerCase()
+                          ) >= 0
+                    )
+                    .map(
+                      (salon) =>
+                        salon.active === 1 && (
+                          <ServiceCard key={salon._id} salon={salon} />
+                        )
+                    )}
+
+                {salons &&
+                  !salonLoading &&
+                  searchKeyTwo &&
+                  searchKeyTwo.selectedOption &&
+                  searchKeyTwo.selectedOption.value &&
+                  searchKey &&
+                  searchKey.selectedOption &&
+                  searchKey.selectedOption.value &&
+                  searchKeyThreeNew &&
+                  searchKeyThreeNew.selectedOption &&
+                  searchKeyThreeNew.selectedOption.value &&
+                  salons
+                    .filter(
+                      (salon) =>
+                        salon.salonType
+                          .toLowerCase()
+                          .indexOf(
+                            searchKeyTwo.selectedOption.value.toLowerCase()
+                          ) >= 0 &&
+                        salon.location
+                          .toLowerCase()
+                          .indexOf(
+                            searchKey.selectedOption.value.toLowerCase()
+                          ) >= 0 &&
+                        salon.salonSubType
+                          .toLowerCase()
+                          .indexOf(
+                            searchKeyThreeNew.selectedOption.value.toLowerCase()
+                          ) >= 0
+                    )
+                    .map(
+                      (salon) =>
+                        salon.active === 1 && (
+                          <ServiceCard key={salon._id} salon={salon} />
+                        )
+                    )}
               </div>
             </Scrollbars>
           </div>

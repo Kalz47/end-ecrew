@@ -15,7 +15,7 @@ export default function ServiceCard({ salon }) {
     setImage(`${PORT}/salon/image/${salon._id}`);
   }, [salon._id]);
   return (
-    <div className="w-full md:h-auto h-56 bg-white rounded-lg sahdow-lg overflow-hidden flex flex-row">
+    <div className="w-full md:h-auto h-auto bg-white rounded-lg sahdow-lg overflow-hidden flex flex-row">
       <div className="w-2/5 h-full">
         <img
           className="object-center object-cover w-full h-full"
