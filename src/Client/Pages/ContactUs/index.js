@@ -25,7 +25,8 @@ export default function ContactUs() {
               Contact Us
             </h2>
             <p class="leading-relaxed mb-5 text-gray-600">
-              Post-ironic portland shabby chic echo park, banjo fashion axe
+              Our team is here to help with any queries or doubts you may have.
+              Just call us or email us and we’ll be right with you{" "}
             </p>
             <div class="relative mb-4">
               <label for="email" class="leading-7 text-sm text-gray-600">
@@ -51,7 +52,7 @@ export default function ContactUs() {
             <button class="text-white bg-sitetheme-blue border-2 hover-border-sitetheme-blue py-2 px-6 focus:outline-none hover:bg-white hover-text-sitetheme-blue text-lg rounded-full">
               Button
             </button>
-            <p class="text-xs text-gray-500 mt-3">
+            <p class="text-xs text-gray-500 mt-3 mb-5">
               Chicharrones blog helvetica normcore iceland tousled brook viral
               artisan.
             </p>

@@ -43,14 +43,13 @@ export default function About() {
             </svg>
 
             <h2 className="text-gray-900 font-medium title-font tracking-wider text-xl">
-              Who are we?{" "}
+              Who we are?{" "}
             </h2>
             <span className="inline-block h-1 w-10 rounded bg-sitetheme-blue mt-8 mb-6"></span>
             <p className="leading-relaxed text-lg">
-              We here at Ecew Digital Lanka guarantee double QQ (QUALITY &
-              QUICK) services. We strive to provide our clients with nothing but
-              the best by utilizing our experienced, skilled and professional
-              service providers.
+              Ecew Digital Lanka(EC) is a local search engine that provides
+              local search related services to users across Srilanka using
+              multiple platforms, such as Website,Mobile website.Apps.
             </p>
           </div>
         </div>
@@ -72,16 +71,15 @@ export default function About() {
             </h2>
             <span className="inline-block h-1 w-10 rounded bg-sitetheme-blue mt-8 mb-6"></span>
             <p className="leading-relaxed text-lg">
-              Currently, we connect professional Service partners to our clients
-              who are looking for specific services in the Salon, Beauty Care
-              industries. This is done through an advanced and user friendly
-              website using modern technology that connects both consumers and
-              service providers in real-time. Our clients can access our nearest
-              professional service partners according to their preferences and
-              requirements in order to save their time and cost. They are able
-              to filter their results for Expert Experience Services (EES) which
-              facilitates the client’s bookings, scheduled appointments, and
-              payments all in one place!
+              Currently, we connect Local Merchants and Service partners to our
+              users who are looking forAny specific services in the
+              Restaurant,Pharmacy,Grocery, Beauty, Event planning, Learning,
+              Party, Banquets Etc, This is done through an advancedand user
+              friendly website using modern technology that connects both
+              consumers andservice providers in real-time. Our users can access
+              our nearest merchant partners and service partners according to
+              their preferences and requirements in order to save their time and
+              cost.
             </p>
           </div>
         </div>
@@ -99,23 +97,13 @@ export default function About() {
             </svg>
 
             <h2 className="text-gray-900 font-medium title-font tracking-wider text-xl">
-              Why choose Ecrew?{" "}
+              EC’s Mission{" "}
             </h2>
             <span className="inline-block h-1 w-10 rounded bg-sitetheme-blue mt-8 mb-6"></span>
-            <p className="leading-relaxed text-lg">
-              <h1 className="font-bold mb-0">Transparent pricing</h1> <br />
-              We show you the exact fixed(estimated) prices of the service
-              providers with no hidden costs. You can view all the details to
-              evaluate which options you would like best. <br />
-              <h1 className="font-bold mb-0">Professionals Only</h1> <br />
-              <br />
-              We provide only the best. We have hand-picked experienced and
-              well-trained professionals just for you.
-              <h1 className="font-bold mb-0">Trust Assured</h1> <br />
-              <br />
-              We will assure great quality in a faster time. We aim to please
-              and provide what’s best for you throughout the service you
-              require.
+            <p className="leading-relaxed text-lg mb-6">
+              Provide Fast, Free,reliable and inclusive information to our users
+              and enable discovery and transections for all products and
+              services.
             </p>
           </div>
         </div>
