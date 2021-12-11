@@ -86,7 +86,7 @@ export default function Footer() {
                       className="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm"
                       href="https://github.com/creativetimofficial/notus-js/blob/main/LICENSE.md?ref=njs-profile"
                     >
-                      Email:ecew@gmail.com{" "}
+                      Email:ecrewdigital@gmail.com{" "}
                     </a>
                   </li>
                   <li>
@@ -94,7 +94,7 @@ export default function Footer() {
                       className="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm"
                       href="tel:+1-555-555-1212"
                     >
-                      Tel : +94 111 123456{" "}
+                      Tel : +94 77 602 0546{" "}
                     </a>
                   </li>
                 </ul>

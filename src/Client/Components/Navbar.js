@@ -62,15 +62,17 @@ function Nav() {
                         : "text-gray-400"
                     }  px-3 py-2 rounded-md text-sm font-medium`}
                   >
-                    Wish to join
+                    Free Listing
                   </Link>
                 </div>
               </div>
             </div>
             <div className="flex flex-row space-x-4">
-              <div className="text-gray-300  hidden md:block">+94xxxxxxxxx</div>
               <div className="text-gray-300  hidden md:block">
-                ##########@gmail.com
+                +94 77 602 0546
+              </div>
+              <div className="text-gray-300  hidden md:block">
+                ecrewdigital@gmail.com
               </div>
             </div>
             <div className="-mr-2 flex md:hidden">
@@ -157,7 +159,7 @@ function Nav() {
                   to="/join"
                   className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
                 >
-                  Wish to join
+                  Free Listing
                 </Link>
               </div>
             </div>

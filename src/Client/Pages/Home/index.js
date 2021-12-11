@@ -13,6 +13,7 @@ import {
   getTypes,
 } from "../../../actions/salon";
 import ServiceImage from "../../Components/logo/salon-working-01.png";
+import Typed from "react-typed";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -110,6 +111,16 @@ export default function Home() {
   return (
     <Container className="h-screen">
       <div className="bg-gray-50 ">
+        <div className="flex justify-center text-lg AF text-gray-600 font-bold">
+          <Typed
+            strings={[
+              "Engage with customers for free on EC today and Get discovered by millions of people ready to buy, visit and hire.",
+            ]}
+            typeSpeed={40}
+            backSpeed={50}
+            loop
+          />
+        </div>
         <div className="md:grid md:grid-cols-5 h-full ">
           <div className>
             <div className="md:pt-8 md:pb-4">
