@@ -126,7 +126,7 @@ export default function Join() {
                   <div className="mb-6 text-center">
                     <ButtonMailto
                       label="Send Email"
-                      mailto={`mailto:kalanaheshan47@gmail.com?body=${JSON.stringify(
+                      mailto={`mailto:ecrewdigital@gmail.com?body=${JSON.stringify(
                         data,
                         null,
                         4
