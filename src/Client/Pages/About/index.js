@@ -71,7 +71,7 @@ export default function About() {
             </h2>
             <span className="inline-block h-1 w-10 rounded bg-sitetheme-blue mt-8 mb-6"></span>
             <p className="leading-relaxed text-lg">
-              Currently, we connect Local Merchants and Service provides to our
+              Currently, we connect Local Merchants and Service providers to our
               users who are looking forAny specific services in the
               Restaurant,Pharmacy,Grocery, Beauty, Event planning, Learning,
               Party, Banquets Etc, This is done through an advanced and user
