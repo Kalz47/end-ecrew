@@ -1,8 +1,29 @@
 /* eslint-disable react/style-prop-object */
-import React from "react";
+import React, { useState } from "react";
 import Iframe from "react-iframe";
+import { Link } from "react-router-dom";
 
 export default function ContactUs() {
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
+  let data = { email, message };
+  const ButtonMailto = ({ mailto, label }) => {
+    return (
+      <Link
+        className="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+        to="#"
+        onClick={(e) => {
+          window.location = mailto;
+          e.preventDefault();
+        }}
+      >
+        {label}
+      </Link>
+    );
+  };
+
+  console.log("uuuu", data);
   return (
     <div>
       <section class="text-gray-600 body-font relative">
@@ -36,6 +57,8 @@ export default function ContactUs() {
                 type="email"
                 id="email"
                 name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 class="w-full bg-white rounded-full border border-gray-300 focus:border-sitetheme-blue focus:ring-2 focus:ring-pink-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
               />
             </div>
@@ -46,12 +69,24 @@ export default function ContactUs() {
               <textarea
                 id="message"
                 name="message"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
                 class="w-full bg-white rounded border border-gray-300 focus:border-sitetheme-blue focus:ring-2 focus:ring-pink-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
               ></textarea>
             </div>
-            <button class="text-white bg-blue-800 border-2 border-blue-800 py-2 px-6 focus:outline-none hover:bg-white hover-text-sitetheme-blue text-lg rounded-full hover:text-blue-800 ">
+            {/* <button class="text-white bg-blue-800 border-2 border-blue-800 py-2 px-6 focus:outline-none hover:bg-white hover-text-sitetheme-blue text-lg rounded-full hover:text-blue-800 ">
               Button
-            </button>
+            </button> */}
+            <div className="mb-6 text-center">
+              <ButtonMailto
+                label="Submit"
+                mailto={`mailto:ecrewdigital@gmail.com?body=${JSON.stringify(
+                  data,
+                  null,
+                  4
+                )}`}
+              />
+            </div>
           </div>
         </div>
       </section>

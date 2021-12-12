@@ -48,7 +48,7 @@ export default function About() {
             <span className="inline-block h-1 w-10 rounded bg-sitetheme-blue mt-8 mb-6"></span>
             <p className="leading-relaxed text-lg">
               Ecew Digital Lanka(EC) is a local search engine that provides
-              local search related services to users across Srilanka using
+              local search related services to users across Sri lanka using
               multiple platforms, such as Website,Mobile website.Apps.
             </p>
           </div>
@@ -71,13 +71,13 @@ export default function About() {
             </h2>
             <span className="inline-block h-1 w-10 rounded bg-sitetheme-blue mt-8 mb-6"></span>
             <p className="leading-relaxed text-lg">
-              Currently, we connect Local Merchants and Service partners to our
+              Currently, we connect Local Merchants and Service provides to our
               users who are looking forAny specific services in the
               Restaurant,Pharmacy,Grocery, Beauty, Event planning, Learning,
-              Party, Banquets Etc, This is done through an advancedand user
+              Party, Banquets Etc, This is done through an advanced and user
               friendly website using modern technology that connects both
-              consumers andservice providers in real-time. Our users can access
-              our nearest merchant partners and service partners according to
+              consumers and service providers in real-time. Our users can access
+              our nearest merchant partners and service providers according to
               their preferences and requirements in order to save their time and
               cost.
             </p>
