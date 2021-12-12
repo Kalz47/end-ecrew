@@ -36,7 +36,7 @@ export default function ContactUs() {
             marginwidth="0"
             title="map"
             scrolling="no"
-            src="https://maps.google.com/maps?width=100%&amp;height=600&amp;hl=en&amp;q=%C4%B0zmir+(My%20Business%20Name)&amp;ie=UTF8&amp;t=&amp;z=14&amp;iwloc=B&amp;output=embed"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4047271.3007788!2d78.46167936282086!3d7.851731431154796!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae2593cf65a1e9d%3A0xe13da4b400e2d38c!2sSri%20Lanka!5e0!3m2!1sen!2slk!4v1639286930811!5m2!1sen!2slk"
             style="filter: grayscale(1) contrast(1.2) opacity(0.4);"
           ></Iframe>
         </div>
