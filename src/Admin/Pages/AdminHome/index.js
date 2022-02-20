@@ -72,14 +72,6 @@ export default function AdminHome() {
 
   console.log("types", types);
 
-  useEffect(() => {
-    if (types && types.length > 0) {
-      setCreateSubType({
-        ...createSubType,
-        subMain: types && types[0].sType && types[0].sType,
-      });
-    }
-  }, [createSubType, types]);
   const [subTypeMap, setSubTypeMap] = useState([]);
 
   const [description, setDescription] = useState("");
@@ -114,6 +106,15 @@ export default function AdminHome() {
 
     dispatch(addSalon(data));
   };
+
+  useEffect(() => {
+    if (types && types.length > 0) {
+      setCreateSubType({
+        ...createSubType,
+        subMain: types && types[0].sType && types[0].sType,
+      });
+    }
+  }, [types]);
 
   useEffect(() => {
     if (error) {
@@ -180,6 +181,12 @@ export default function AdminHome() {
     e.preventDefault();
     dispatch(addSubType(createSubType));
   };
+
+  useEffect(() => {
+    if (types && types.length > 0) {
+      setSalonType(types[0].sType);
+    }
+  }, [types, types && types !== undefined && types.length]);
 
   useEffect(() => {
     const sstype = [];
