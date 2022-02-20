@@ -69,6 +69,17 @@ export default function AdminHome() {
     subMain: "",
     subType: "",
   });
+
+  console.log("types", types);
+
+  useEffect(() => {
+    if (types && types.length > 0) {
+      setCreateSubType({
+        ...createSubType,
+        subMain: types && types[0].sType && types[0].sType,
+      });
+    }
+  }, [types && types.length]);
   const [subTypeMap, setSubTypeMap] = useState([]);
 
   const [description, setDescription] = useState("");
@@ -725,12 +736,12 @@ export default function AdminHome() {
                 type="text"
                 className="py-1 px-1 text-gray-900 outline-none block h-full w-full"
                 value={subType}
-                onChange={(e) =>
+                onChange={(e) => {
                   setCreateSubType({
                     ...createSubType,
                     subType: e.target.value,
-                  })
-                }
+                  });
+                }}
               />
             </p>
           </div>
