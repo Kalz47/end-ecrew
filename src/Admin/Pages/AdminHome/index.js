@@ -180,7 +180,11 @@ export default function AdminHome() {
 
   const handleSubType = async (e) => {
     e.preventDefault();
+
     dispatch(addSubType(createSubType));
+    setTimeout(() => {
+      window.location.reload();
+    }, 5000);
   };
 
   useEffect(() => {
