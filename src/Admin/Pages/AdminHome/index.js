@@ -79,7 +79,7 @@ export default function AdminHome() {
         subMain: types && types[0].sType && types[0].sType,
       });
     }
-  }, [types && types.length]);
+  }, [createSubType, types]);
   const [subTypeMap, setSubTypeMap] = useState([]);
 
   const [description, setDescription] = useState("");
