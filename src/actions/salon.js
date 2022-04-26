@@ -147,9 +147,9 @@ export const addSubType = (data) => async (dispatch) => {
   }
 };
 
-export const getSubTypes = () => async (dispatch) => {
+export const getSubTypes = (id) => async (dispatch) => {
   try {
-    const res = await axios.get(`${PORT}/subType`);
+    const res = await axios.get(`${PORT}/subType/${id}`);
     console.log(res);
     dispatch({
       type: GET_SUB_TYPES_SUCCESS,

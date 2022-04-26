@@ -14,6 +14,7 @@ import {
 } from "../../../actions/salon";
 import ServiceImage from "../../Components/logo/salon-working-01.png";
 import Typed from "react-typed";
+import AddCard from "./AddCard";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -21,12 +22,9 @@ export default function Home() {
   const { locations } = useSelector((state) => state.location);
   const { types, subTypes } = useSelector((state) => state.type);
 
-  const [searchKey, setSearchKey] = useState("");
-  const [searchKeyTwo, setSearchKeyTwo] = useState("");
-  const [searchKeyThree, setSearchKeyThree] = useState("");
-  const [searchKeyThreeNew, setSearchKeyThreeNew] = useState("");
-
-  const [isClearable] = useState(true);
+  const [show, setShow] = useState(false);
+  const [typeKey, setTypeKey] = useState("");
+  const [subTypeKey, setSubTypeKey] = useState("");
 
   useEffect(() => {
     dispatch(getAllSalons());
@@ -37,76 +35,17 @@ export default function Home() {
   useEffect(() => {
     dispatch(getLocations());
     dispatch(getTypes());
-    dispatch(getSubTypes());
   }, [dispatch]);
 
-  locations &&
-    locations.map((location) =>
-      optionArray.push({ value: location.name, label: location.name })
-    );
-
-  const handleChange = (selectedOption) => {
-    setSearchKey({ selectedOption });
-  };
-
-  const handleChangeType = (selectedOption) => {
-    setSearchKeyTwo({ selectedOption });
-  };
-
-  const handleChangeSubType = (selectedOption) => {
-    setSearchKeyThreeNew({ selectedOption });
-  };
-  const typeArray = [];
-
-  types &&
-    types.map((type) =>
-      typeArray.push({ value: type.sType, label: type.sType })
-    );
-
-  // const gradeArray = [
-  //   {
-  //     label: "Silver",
-  //     value: "Silver",
-  //   },
-  //   {
-  //     label: "Gold",
-  //     value: "Gold",
-  //   },
-  //   {
-  //     label: "Platinum",
-  //     value: "Platinum",
-  //   },
-  // ];
-
-  // const handleChangeGrade = (selectedOption) => {
-  //   setSearchKeyThree({ selectedOption });
-  // };
-
   useEffect(() => {
-    let sstype = [];
-    subTypes &&
-      searchKeyTwo &&
-      searchKeyTwo.selectedOption &&
-      searchKeyTwo.selectedOption.value &&
-      subTypes.map((s) => {
-        if (
-          searchKeyTwo.selectedOption.value &&
-          s.subMain === searchKeyTwo.selectedOption.value
-        ) {
-          sstype.push(s.subType);
-        }
-      });
-    setSearchKeyThree(sstype);
-  }, [searchKeyTwo, subTypes]);
+    if (typeKey) dispatch(getSubTypes(typeKey));
+  }, [typeKey]);
 
-  const subTypeArray = [];
+  const handleShow = () => {
+    setShow(!show);
+  };
 
-  searchKeyThree &&
-    searchKeyThree.map((st) => subTypeArray.push({ value: st, label: st }));
-
-  console.log("KEY 3", searchKeyThreeNew);
-  console.log("KEY 2", searchKeyTwo);
-  console.log("KEY 1", searchKey);
+  console.log("Types", typeKey);
 
   return (
     <Container className="h-screen">
@@ -121,227 +60,62 @@ export default function Home() {
             loop
           />
         </div>
-        <div className="md:grid md:grid-cols-5 h-full ">
-          <div className>
-            <div className="md:pt-8 md:pb-4">
-              <div className="md:border-r border-gray-200 h-full px-4 ">
-                <label className="AF text-gray-500 mt-8 md:mt-0 ">
-                  Select your location
-                </label>
-                <Select
-                  className="md:mt-4 sm:mt-2"
-                  options={optionArray}
-                  defaultInputValue=""
-                  isClearable={isClearable}
-                  onChange={handleChange}
-                />
-              </div>
+        <div className="md:grid md:grid-cols-5 h-full">
+          <div className="">
+            <div className="md:border-r border-gray-200 h-full px-4 hidden sm:block">
+              {types.map((type) => (
+                <div className="pb-4">
+                  <div
+                    onClick={(e) => setTypeKey(type._id)}
+                    className="border rounded-lg p-3 font-sans AF text-md text-center text-center cursor-pointer font-black hover:bg-blue-800 hover:text-white hover:text-lg"
+                  >
+                    {type.sType}
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="md:pb-4">
-              <div className="md:border-r border-gray-200 h-full px-4 ">
-                <label className="AF text-gray-500 mt-8 md:mt-0 ">
-                  Select your type
-                </label>
-                <Select
-                  className="md:mt-4 sm:mt-2"
-                  options={typeArray}
-                  defaultInputValue=""
-                  isClearable={isClearable}
-                  onChange={handleChangeType}
-                />
-              </div>
+            <button onClick={handleShow}>{show ? "hide" : "show"}</button>
+            <div
+              className={`md:border-r border-gray-200 h-full px-4 ${
+                show ? "block" : "hidden"
+              } sm:hidden`}
+            >
+              {types.map((type) => (
+                <div className="pb-4">
+                  <div
+                    onClick={(e) => setTypeKey(type._id)}
+                    className="border rounded-lg p-3 font-sans AF text-md text-center cursor-pointer font-black hover:bg-blue-800 hover:text-white hover:text-lg"
+                  >
+                    {type.sType}
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="md:pb-4">
-              <div className="md:border-r border-gray-200 h-full px-4 ">
-                <label className="AF text-gray-500 mt-8 md:mt-0 ">
-                  Select your sub type
-                </label>
-                <Select
-                  className="md:mt-4 sm:mt-2"
-                  options={subTypeArray}
-                  defaultInputValue=""
-                  isClearable={isClearable}
-                  onChange={handleChangeSubType}
-                />
-              </div>
-            </div>
-            {/* <div className="">
-              <div className="md:border-r border-gray-200 h-full px-4 ">
-                <label className="AF text-gray-500 mt-8 md:mt-0 ">
-                  Select your type
-                </label>
-                <Select
-                  className="md:mt-4 sm:mt-2"
-                  options={gradeArray}
-                  defaultInputValue=""
-                  isClearable={isClearable}
-                  onChange={handleChangeGrade}
-                />
-              </div>
-            </div> */}
           </div>
           <div className="md:col-span-3 mt-10">
+            <div className="mb-4 px-4 flex justify-center space-x-4">
+              {subTypes &&
+                subTypes.length > 0 &&
+                subTypes.map((subType) => (
+                  <div
+                    onClick={(e) => setSubTypeKey(subType.subType)}
+                    className="border rounded-full w-48 flex justify-center items-center border-blue-400 AF hover:bg-blue-800 hover:text-white"
+                  >
+                    {subType.subType}
+                  </div>
+                ))}
+            </div>
             <Scrollbars style={{ height: 700 }}>
               <div className="space-y-4 px-4">
                 <Category />
-                {salons && !salonLoading
-                  ? (!searchKey || searchKey.selectedOption === null) &&
-                    (!searchKeyTwo || searchKeyTwo.selectedOption === null) &&
-                    (!searchKeyThreeNew ||
-                      searchKeyThreeNew.selectedOption === null) &&
-                    salons.map(
+                {!salonLoading
+                  ? salons.map(
                       (salon) =>
                         salon.active === 1 && (
                           <ServiceCard key={salon._id} salon={salon} />
                         )
                     )
                   : "Loading"}
-
-                {salons &&
-                  !salonLoading &&
-                  searchKey &&
-                  searchKey.selectedOption &&
-                  searchKey.selectedOption.value &&
-                  (!searchKeyTwo || searchKeyTwo.selectedOption === null) &&
-                  (!searchKeyThreeNew ||
-                    searchKeyThreeNew.selectedOption === null) &&
-                  salons
-                    .filter(
-                      (salon) =>
-                        salon.location
-                          .toLowerCase()
-                          .indexOf(
-                            searchKey.selectedOption.value.toLowerCase()
-                          ) >= 0
-                    )
-                    .map(
-                      (salon) =>
-                        salon.active === 1 && (
-                          <ServiceCard key={salon._id} salon={salon} />
-                        )
-                    )}
-
-                {salons &&
-                  !salonLoading &&
-                  searchKeyTwo &&
-                  searchKeyTwo.selectedOption &&
-                  searchKeyTwo.selectedOption.value &&
-                  (!searchKey || searchKey.selectedOption === null) &&
-                  (!searchKeyThreeNew ||
-                    searchKeyThreeNew.selectedOption === null) &&
-                  salons
-                    .filter(
-                      (salon) =>
-                        salon.salonType
-                          .toLowerCase()
-                          .indexOf(
-                            searchKeyTwo.selectedOption.value.toLowerCase()
-                          ) >= 0
-                    )
-                    .map(
-                      (salon) =>
-                        salon.active === 1 && (
-                          <ServiceCard key={salon._id} salon={salon} />
-                        )
-                    )}
-
-                {salons &&
-                  !salonLoading &&
-                  searchKeyTwo &&
-                  searchKeyTwo.selectedOption &&
-                  searchKeyTwo.selectedOption.value &&
-                  searchKeyThreeNew &&
-                  searchKeyThreeNew.selectedOption &&
-                  searchKeyThreeNew.selectedOption.value &&
-                  (!searchKey || searchKey.selectedOption === null) &&
-                  salons
-                    .filter(
-                      (salon) =>
-                        salon.salonType
-                          .toLowerCase()
-                          .indexOf(
-                            searchKeyTwo.selectedOption.value.toLowerCase()
-                          ) >= 0 &&
-                        salon.salonSubType
-                          .toLowerCase()
-                          .indexOf(
-                            searchKeyThreeNew.selectedOption.value.toLowerCase()
-                          ) >= 0
-                    )
-                    .map(
-                      (salon) =>
-                        salon.active === 1 && (
-                          <ServiceCard key={salon._id} salon={salon} />
-                        )
-                    )}
-
-                {salons &&
-                  !salonLoading &&
-                  searchKeyTwo &&
-                  searchKeyTwo.selectedOption &&
-                  searchKeyTwo.selectedOption.value &&
-                  searchKey &&
-                  searchKey.selectedOption &&
-                  searchKey.selectedOption.value &&
-                  (!searchKeyThreeNew ||
-                    searchKeyThreeNew.selectedOption === null) &&
-                  salons
-                    .filter(
-                      (salon) =>
-                        salon.salonType
-                          .toLowerCase()
-                          .indexOf(
-                            searchKeyTwo.selectedOption.value.toLowerCase()
-                          ) >= 0 &&
-                        salon.location
-                          .toLowerCase()
-                          .indexOf(
-                            searchKey.selectedOption.value.toLowerCase()
-                          ) >= 0
-                    )
-                    .map(
-                      (salon) =>
-                        salon.active === 1 && (
-                          <ServiceCard key={salon._id} salon={salon} />
-                        )
-                    )}
-
-                {salons &&
-                  !salonLoading &&
-                  searchKeyTwo &&
-                  searchKeyTwo.selectedOption &&
-                  searchKeyTwo.selectedOption.value &&
-                  searchKey &&
-                  searchKey.selectedOption &&
-                  searchKey.selectedOption.value &&
-                  searchKeyThreeNew &&
-                  searchKeyThreeNew.selectedOption &&
-                  searchKeyThreeNew.selectedOption.value &&
-                  salons
-                    .filter(
-                      (salon) =>
-                        salon.salonType
-                          .toLowerCase()
-                          .indexOf(
-                            searchKeyTwo.selectedOption.value.toLowerCase()
-                          ) >= 0 &&
-                        salon.location
-                          .toLowerCase()
-                          .indexOf(
-                            searchKey.selectedOption.value.toLowerCase()
-                          ) >= 0 &&
-                        salon.salonSubType
-                          .toLowerCase()
-                          .indexOf(
-                            searchKeyThreeNew.selectedOption.value.toLowerCase()
-                          ) >= 0
-                    )
-                    .map(
-                      (salon) =>
-                        salon.active === 1 && (
-                          <ServiceCard key={salon._id} salon={salon} />
-                        )
-                    )}
               </div>
             </Scrollbars>
           </div>

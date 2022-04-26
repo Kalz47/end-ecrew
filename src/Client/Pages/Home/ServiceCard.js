@@ -18,7 +18,7 @@ export default function ServiceCard({ salon }) {
     <div className="w-full md:h-auto h-auto bg-white rounded-lg sahdow-lg overflow-hidden flex flex-row">
       <div className="w-2/5 h-full">
         <img
-          className="object-center object-cover w-full h-full"
+          className="object-center object-cover h-48"
           src={image}
           alt="photo"
         />
@@ -47,57 +47,6 @@ export default function ServiceCard({ salon }) {
               <p className="md:text-base text-xs text-gray-400 font-normal AF mt-2 md:mt-0 md:pl-0 pl-2">
                 {salon.location}
               </p>
-            </div>
-          </>
-        ) : (
-          ""
-        )}
-        {salon.openTime ? (
-          <>
-            {" "}
-            <div className="flex flex-row ...">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="md:h-6 md:w-6 h-4 w-4 mt-1 md:mt-0 text-gray-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>{" "}
-              <div className="text-gray-500 pl-2 AF">
-                Open Time : {salon.openTime}
-              </div>
-            </div>
-          </>
-        ) : (
-          ""
-        )}
-        {salon.closeTime ? (
-          <>
-            <div class="flex flex-row ...">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="md:h-6 md:w-6 h-4 w-4 mt-1 md:mt-0 text-gray-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>{" "}
-              <div className="text-gray-500 pl-2 AF">
-                Close Time : {salon.closeTime}
-              </div>
             </div>
           </>
         ) : (

@@ -1,211 +1,244 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable array-callback-return */
-
+import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { TimePicker } from "antd";
-import moment from "moment";
-import "antd/dist/antd.css";
-import { useDispatch, useSelector } from "react-redux";
-import { addSubType, getAllSalons, getSubTypes } from "../../../actions/salon";
-import { addSalon, addNewLocation } from "../../../actions/salon";
-import { getLocations, getTypes, addSalonType } from "../../../actions/salon";
+import { PORT } from "../../../actions/types";
+import Tab from "./Tab";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllSalons } from "../../../actions/salon";
 import { Link } from "react-router-dom";
-import axios from "axios";
-import { PORT } from "../../../actions/types";
 import { logout } from "../../../actions/auth";
 
-export default function AdminHome() {
-  const [tab, setTab] = useState(0);
+const AdminHome = () => {
+  //common
   const dispatch = useDispatch();
   const { salons, salonLoading } = useSelector((state) => state.salon);
-  // const [role, setRole] = useState("");
-
-  const role = localStorage.getItem("role");
-
   useEffect(() => {
     dispatch(getAllSalons());
-  }, [dispatch]);
+  }, []);
 
-  console.log(salons, "admin form");
-
-  useEffect(() => {
-    dispatch(getLocations());
-    dispatch(getTypes());
-    dispatch(getSubTypes());
-  }, [dispatch]);
-
-  const { addSalonSuc, error } = useSelector((state) => state.salon);
-  const { locations, locationsLoading, locationError } = useSelector(
-    (state) => state.location
-  );
-  const { types, typeError, subTypes } = useSelector((state) => state.type);
-
-  const [name, setName] = useState("");
-  const [location, setLocation] = useState(
-    locations && !locationsLoading ? locations[0].name : ""
-  );
-  const [salonType, setSalonType] = useState("");
-
-  // useEffect(() => {
-  //   setSalonType(types && !typeLoading && types[0].name && types[0].name);
-  // }, [typeLoading, types]);
-  const [contact, setContact] = useState("");
-
-  const [openTime, setOpen] = useState("");
-  const [grade, setGrade] = useState("");
-
-  const [closeTime, setClose] = useState("");
-  const [wifi, setWifi] = useState(false);
-  const [parking, setParking] = useState(false);
-  const [ac, setAc] = useState(false);
-  const [card, setCard] = useState(false);
-
-  const [image, setImage] = useState("");
-  const [addLocation, setAddLocation] = useState("");
-  const [sType, setSType] = useState("");
-  const [address, setAddress] = useState("");
-  const [createSubType, setCreateSubType] = useState({
-    subMain: "",
-    subType: "",
+  const [tabs, setTabs] = useState({
+    tab1: true,
+    tab2: false,
+    tab3: false,
+    tab4: false,
   });
 
-  console.log("types", types);
+  const { tab1, tab2, tab3, tab4 } = tabs;
 
-  const [subTypeMap, setSubTypeMap] = useState([]);
+  const handleTab1 = () => {
+    setTabs({ ...tabs, tab1: true, tab2: false, tab3: false, tab4: false });
+  };
+  const handleTab2 = () => {
+    setTabs({ ...tabs, tab1: false, tab2: true, tab3: false, tab4: false });
+  };
+  const handleTab3 = () => {
+    setTabs({ ...tabs, tab1: false, tab2: false, tab3: true, tab4: false });
+  };
+  const handleTab4 = () => {
+    setTabs({ ...tabs, tab1: false, tab2: false, tab3: false, tab4: true });
+    handleLogout();
+  };
+  const [types, setTypes] = useState([]);
 
-  const [description, setDescription] = useState("");
-  const [salonSubType, setSalonSubType] = useState("");
-  const [verified, setVerified] = useState(false);
+  useEffect(() => {
+    const getTypes = async () => {
+      const res = await axios.get(PORT + "/type");
+      setTypes(res.data);
+    };
+    getTypes();
+  }, []);
+  //Add business
+  const [business, setBusiness] = useState({
+    name: "",
+    contactNo: "",
+    description: "",
+    address: "",
+    grade: "",
+    type: "",
+    subType: "",
+    service: false,
+    parking: false,
+    card: false,
+    delivery: false,
+    verified: false,
+  });
+  const [image, setImage] = useState("");
 
-  const { subMain, subType } = createSubType;
+  const [subTypes, setSubTypes] = useState([]);
+  const {
+    name,
+    contactNo,
+    description,
+    address,
+    grade,
+    type,
+    subType,
+    parking,
+    card,
+    service,
+    delivery,
+    verified,
+  } = business;
+
+  const handleOnChange = (e) => {
+    setBusiness({ ...business, [e.target.name]: e.target.value });
+  };
+
+  useEffect(() => {
+    const getSubTypes = async () => {
+      let val;
+      for (let i = 0; i < types.length; i++) {
+        if (type === types[i].sType) {
+          val = types[i]._id;
+          console.log(val);
+        }
+      }
+      const res = await axios.get(PORT + `/subType/${val}`);
+      console.log(res);
+      setSubTypes(res.data);
+    };
+    if (type) getSubTypes();
+  }, [type]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!name) {
+      toast.error("Business name required");
+      return;
+    }
+    if (!contactNo) {
+      toast.error("Business contact number required");
+      return;
+    }
+    if (!address) {
+      toast.error("Business address required");
+      return;
+    }
+    if (!type) {
+      toast.error("Business type required");
+      return;
+    }
+    if (!subType) {
+      toast.error("Business sub type required");
+      return;
+    }
+
     let data = new FormData();
     data.append("name", name);
-    data.append("location", location);
-    data.append("salonType", salonType);
+    data.append("salonType", type);
 
     data.append("grade", grade);
 
-    data.append("contact", contact);
-    data.append("openTime", openTime);
-    data.append("closeTime", closeTime);
+    data.append("contact", contactNo);
     data.append("parking", parking);
-    data.append("ac", ac);
-    data.append("wifi", wifi);
+    data.append("ac", service);
+    data.append("wifi", delivery);
     data.append("card", card);
     data.append("address", address);
     data.append("description", description);
-    data.append("salonSubType", salonSubType);
+    data.append("salonSubType", subType);
     data.append("verified", verified);
 
     image && data.append("image", image);
 
-    dispatch(addSalon(data));
-  };
+    try {
+      const res = await axios.post(PORT + "/salon", data);
+      console.log(res);
+      toast.success("Business added");
+    } catch (error) {
+      toast.error("Business adding fail");
 
-  useEffect(() => {
-    if (types && types.length > 0) {
-      setCreateSubType({
-        ...createSubType,
-        subMain: types && types[0].sType && types[0].sType,
-      });
+      console.log(error);
     }
-  }, [types]);
-
-  useEffect(() => {
-    if (error) {
-      toast.error(error);
-    } else if (addSalonSuc) {
-      toast.success(addSalonSuc);
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
-    }
-  }, [error, addSalonSuc]);
-
-  const handleLocationSubmit = (e) => {
-    e.preventDefault();
-
-    const data = { addLocation };
-    dispatch(addNewLocation(data));
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);
   };
 
-  const handleTypeSubmit = (e) => {
-    e.preventDefault();
-
-    const data = { sType };
-    dispatch(addSalonType(data));
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);
-  };
+  //Edit, Delete, Active, Deactivate business
 
   const handleDelete = async (id) => {
     try {
       const res = await axios.delete(`${PORT}/salon/${id}`);
       toast.success(res);
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
+      dispatch(getAllSalons());
+      toast.success("Business deleted");
     } catch (error) {
       console.log(error);
+      toast.success("Business deleting error");
+    }
+  };
+
+  const handleActivate = async (id) => {
+    await axios.put(`${PORT}/salon/active/${id}`);
+    dispatch(getAllSalons());
+    toast.success("Business activated");
+  };
+  const handleDeactivate = async (id) => {
+    await axios.put(`${PORT}/salon/deactivate/${id}`);
+    dispatch(getAllSalons());
+    toast.success("Business deactivated");
+  };
+
+  //Add type
+
+  const [addType, setAddType] = useState("");
+
+  const handleAddType = (e) => {
+    setAddType(e.target.value);
+  };
+
+  const handleAddTypeSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      if (!addType) {
+        toast.error("Add type is empty");
+        return;
+      }
+      const data = { sType: addType };
+      const res = await axios.post(PORT + "/type", data);
+      if (res.status === 200) {
+        toast.success("Type added successful");
+        setAddType("");
+      } else {
+        toast.error("Type adding fail");
+      }
+    } catch (error) {
+      toast.error("Type adding fail");
+    }
+  };
+
+  //Add sub type
+  const [addSubType, setAddSubType] = useState("");
+  const [mainType, setMainType] = useState("");
+
+  const handleAddSubTypeSubmit = async (e) => {
+    e.preventDefault();
+    let val;
+    for (let i = 0; i < types.length; i++) {
+      if (mainType === types[i].sType) {
+        val = types[i]._id;
+      }
+    }
+
+    try {
+      const res = await axios.post(PORT + "/subType", {
+        subMain: val,
+        subType: addSubType,
+      });
+      if (res.status === 200) {
+        toast.success("Sub type added successful");
+      } else {
+        toast.error("Sub type adding fail");
+      }
+    } catch (error) {
+      toast.error("Sub type adding fail");
     }
   };
 
   const handleLogout = () => {
     dispatch(logout());
   };
-
-  const handleActivate = async (id) => {
-    await axios.put(`${PORT}/salon/active/${id}`);
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);
-  };
-
-  const handleDeactivate = async (id) => {
-    await axios.put(`${PORT}/salon/deactivate/${id}`);
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);
-  };
-
-  const handleSubType = async (e) => {
-    e.preventDefault();
-
-    dispatch(addSubType(createSubType));
-    setTimeout(() => {
-      window.location.reload();
-    }, 5000);
-  };
-
-  useEffect(() => {
-    if (types && types.length > 0) {
-      setSalonType(types[0].sType);
-    }
-  }, [types, types && types !== undefined && types.length]);
-
-  useEffect(() => {
-    const sstype = [];
-    subTypes &&
-      subTypes.map((s) => {
-        if (s.subMain === salonType) {
-          sstype.push(s.subType);
-        }
-      });
-    setSubTypeMap(sstype);
-    setSalonSubType(sstype[0]);
-  }, [salonType, subMain, subTypes]);
-
-  console.log("role", subTypeMap);
 
   return (
     <>
@@ -220,372 +253,260 @@ export default function AdminHome() {
         draggable
         pauseOnHover
       />
-      {error && <h1 className="text-red-500 text-center">{error}</h1>}
-      {locationError && (
-        <h1 className="text-red-500 text-center">{locationError}</h1>
-      )}
-      {typeError && (
-        <h1 className="text-red-500 text-center">{locationError}</h1>
-      )}
-
-      <div className="flex justify-center flex-row space-x-4">
-        <button
-          onClick={() => setTab(0)}
-          className="py-2  px-6 border border-blue-500 hover:bg-blue-600 hover:text-white text-blue-500 rounded-md mt-4"
-        >
-          Add Salon
-        </button>
-        <button
-          onClick={() => setTab(1)}
-          className="py-2  px-6 border border-blue-500 hover:bg-blue-600 hover:text-white text-blue-500 rounded-md mt-4"
-        >
-          Add Location
-        </button>
-        <button
-          onClick={() => setTab(2)}
-          className="py-2  px-6 border border-blue-500 hover:bg-blue-600 hover:text-white text-blue-500 rounded-md mt-4"
-        >
-          Add Salon Type
-        </button>
-        <button
-          onClick={() => setTab(3)}
-          className="py-2  px-6 border border-blue-500 hover:bg-blue-600 hover:text-white text-blue-500 rounded-md mt-4"
-        >
-          Add Salon Sub Type
-        </button>
-        <button
-          onClick={handleLogout}
-          className="py-2  px-6 border border-blue-500 hover:bg-blue-600 hover:text-white text-blue-500 rounded-md mt-4"
-        >
-          Logout
-        </button>
-      </div>
-      <div className={`${tab === 0 ? "block" : "hidden"}`}>
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white shadow rounded-lg p-6"
-        >
-          <div className="grid lg:grid-cols-2 gap-6">
-            <div className="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1">
-              <div className="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
-                <p>
-                  <label for="name" className="bg-white text-gray-600 px-1">
-                    Salon name *
-                  </label>
-                </p>
-              </div>
-              <p>
-                <input
-                  id="name"
-                  autocomplete="false"
-                  tabindex="0"
-                  type="text"
-                  name="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="py-1 px-1 text-gray-900 outline-none block h-full w-full"
-                />
-              </p>
-            </div>
-            <div className="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1">
-              <div className="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
-                <p>
-                  <label for="lastname" className="bg-white text-gray-600 px-1">
-                    Contact No *
-                  </label>
-                </p>
-              </div>
-              <p>
-                <input
-                  id="lastname"
-                  autocomplete="false"
-                  tabindex="0"
-                  type="text"
-                  name="contact"
-                  value={contact}
-                  onChange={(e) => setContact(e.target.value)}
-                  className="py-1 px-1 outline-none block h-full w-full"
-                />
-              </p>
-            </div>
-            <div className="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1">
-              <div className="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
-                <p>
-                  <label for="lastname" className="bg-white text-gray-600 px-1">
-                    Description *
-                  </label>
-                </p>
-              </div>
-              <p>
-                <input
-                  id="lastname"
-                  autocomplete="false"
-                  tabindex="0"
-                  type="text"
-                  name="contact"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  className="py-1 px-1 outline-none block h-full w-full"
-                />
-              </p>
-            </div>
-            <div className="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1">
-              <div className="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
-                <p>
-                  <label for="lastname" className="bg-white text-gray-600 px-1">
-                    Address *
-                  </label>
-                </p>
-              </div>
-              <p>
-                <input
-                  id="lastname"
-                  autocomplete="false"
-                  tabindex="0"
-                  type="text"
-                  name="contact"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  className="py-1 px-1 outline-none block h-full w-full"
-                />
-              </p>
-            </div>
-            <div className="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1">
-              <div className="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
-                <p>
-                  <label for="username" className="bg-white text-gray-600 px-1">
-                    Grade *
-                  </label>
-                </p>
-              </div>
-              <p>
-                <input
-                  id="username"
-                  autocomplete="false"
-                  tabindex="0"
-                  type="text"
-                  name="grade"
-                  value={grade}
-                  onChange={(e) => setGrade(e.target.value)}
-                  className="py-1 px-1 outline-none block h-6 w-full "
-                />
-              </p>
-            </div>
-            <div className="space-x-8">
-              <div className="inline-block relative w-64">
-                <div className="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
-                  <p>
-                    <label
-                      for="username"
-                      className="bg-white text-gray-600 px-1"
-                    >
-                      Location *
-                    </label>
-                  </p>
-                </div>
-                <select
-                  onChange={(e) => setLocation(e.target.value)}
-                  className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                >
-                  {locations &&
-                    locations.map((location) => (
-                      <option key={location._id} value={location.name}>
-                        {location.name}
-                      </option>
-                    ))}
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"></div>
-              </div>
-              {/* Set Type */}
-              <div className="inline-block relative w-64">
-                <div className="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
-                  <p>
-                    <label
-                      for="username"
-                      className="bg-white text-gray-600 px-1"
-                    >
-                      Type *
-                    </label>
-                  </p>
-                </div>
-                <select
-                  onChange={(e) => setSalonType(e.target.value)}
-                  className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                >
-                  {types &&
-                    types.map((type) => (
-                      <option key={type._id} value={type.sType}>
-                        {type.sType}
-                      </option>
-                    ))}
-                </select>
-              </div>
-              <div className=" mt-6  relative w-64 flex justify-start">
-                <div className="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
-                  <p>
-                    <label
-                      for="username"
-                      className="bg-white text-gray-600 px-1"
-                    >
-                      Sub Type *
-                    </label>
-                  </p>
-                </div>
-                <select
-                  onChange={(e) => setSalonSubType(e.target.value)}
-                  className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                >
-                  {subTypeMap &&
-                    subTypeMap.map((type) => (
-                      <option key={type} value={type}>
-                        {type}
-                      </option>
-                    ))}
-                </select>
-              </div>
-            </div>
-            <div>
-              <label
-                className="
-                w-64
-                flex flex-col
-                items-center
-                px-4
-                py-6
-                bg-white
-                rounded-md
-                shadow-md
-                tracking-wide
-                uppercase
-                border border-blue
-                cursor-pointer
-                hover:bg-purple-600 hover:text-white
-                text-purple-600
-                ease-linear
-                transition-all
-                duration-150
-            "
-              >
-                <i className="fa fa-cloud-upload-alt fa-3x"></i>
-                <span className="mt-2 text-base leading-normal">
-                  Select a file
-                </span>
-                <input
-                  type="file"
-                  name="image"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={(e) => setImage(e.target.files[0])}
-                />
-              </label>
-            </div>
-            <div className="flex flex-row space-x-8">
-              <div>
-                <label for="name" className="bg-white text-gray-600 px-1">
-                  Open Time{" "}
-                </label>{" "}
-                <TimePicker
-                  defaultValue={moment("12:08", "HH:mm")}
-                  format="HH:mm"
-                  onChange={(time, timeString) => setOpen(timeString)}
-                />
-              </div>
-              <div>
-                <label for="name" className="bg-white text-gray-600 px-1">
-                  Close Time{" "}
-                </label>{" "}
-                <TimePicker
-                  defaultValue={moment("12:08", "HH:mm")}
-                  format="HH:mm"
-                  onChange={(time, timeString) => setClose(timeString)}
-                />
-              </div>
-            </div>
-            <div className="space-x-20">
-              <label className="inline-flex items-center mt-3">
-                <input
-                  type="checkbox"
-                  className="form-checkbox h-5 w-5 text-gray-600"
-                  onChange={(e) => setAc(e.target.checked)}
-                />
-                <span className="ml-2 text-gray-700">24 Service</span>
-              </label>
-              <label className="inline-flex items-center mt-3">
-                <input
-                  type="checkbox"
-                  className="form-checkbox h-5 w-5 text-gray-600"
-                  onChange={(e) => setParking(e.target.checked)}
-                />
-                <span className="ml-2 text-gray-700">Parking</span>
-              </label>
-              <label className="inline-flex items-center mt-3">
-                <input
-                  type="checkbox"
-                  className="form-checkbox h-5 w-5 text-gray-600"
-                  onChange={(e) => setWifi(e.target.checked)}
-                />
-                <span className="ml-2 text-gray-700">Delivery</span>
-              </label>
-              <label className="inline-flex items-center mt-3">
-                <input
-                  type="checkbox"
-                  className="form-checkbox h-5 w-5 text-gray-600"
-                  onChange={(e) => setCard(e.target.checked)}
-                />
-                <span className="ml-2 text-gray-700">Card</span>
-              </label>
-              <label className="inline-flex items-center mt-3">
-                <input
-                  type="checkbox"
-                  className="form-checkbox h-5 w-5 text-gray-600"
-                  onChange={(e) => setVerified(e.target.checked)}
-                />
-                <span className="ml-2 text-gray-700">Verified</span>
-              </label>
-            </div>
-          </div>
-          <div className="border-t mt-6 pt-3">
-            <button className="rounded text-gray-100 px-3 py-1 bg-blue-500 hover:shadow-inner hover:bg-blue-700 transition-all duration-300">
-              Save
-            </button>
-          </div>
-        </form>
-      </div>
-      <div className={`p-10 ${tab === 1 ? "block" : "hidden"}`}>
-        <form onSubmit={handleLocationSubmit}>
-          <div className="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1 w-40">
-            <div className="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
-              <p>
-                <label for="name" className="bg-white text-gray-600 px-1">
-                  Location *
-                </label>
-              </p>
-            </div>
-            <p>
-              <input
-                id="name"
-                autocomplete="false"
-                tabindex="0"
-                type="text"
-                className="py-1 px-1 text-gray-900 outline-none block h-full w-full"
-                value={addLocation}
-                onChange={(e) => setAddLocation(e.target.value)}
-              />
-            </p>
-          </div>
-          <div className="border-t mt-6 pt-3">
-            <button
-              // onChange={handleSubmit}
-              className="rounded text-gray-100 px-3 py-1 bg-blue-500 hover:shadow-inner hover:bg-blue-700 transition-all duration-300"
-            >
-              Save
-            </button>
-          </div>{" "}
-        </form>
+      <div className="h-16 bg-blue-800 AF  flex items-center justify-center text-white text-2xl">
+        Admin Panel
       </div>
 
-      {/* Salon edit or delete */}
-      {role && tab === 0 && (
+      <div className="h-16 mt-4 flex flex-row justify-around">
+        <Tab name="Add Business" onClick={handleTab1} />
+        <Tab name="Add Type" onClick={handleTab2} />
+        <Tab name="Add Sub Type" onClick={handleTab3} />
+        <Tab name="Logout" onClick={handleTab4} />
+      </div>
+
+      {/* Add business */}
+      {tab1 && (
+        <div>
+          <div className="  AF  flex items-center justify-center text-blue-800 text-2xl mt-4 mb-4">
+            Add Business
+          </div>
+
+          <form action="#" method="POST" onSubmit={handleSubmit}>
+            <div className="shadow overflow-hidden sm:rounded-md">
+              <div className="px-4 py-5 bg-white sm:p-6">
+                <div className="grid grid-cols-6 gap-6">
+                  <div className="col-span-6 sm:col-span-3">
+                    <label
+                      for="first-name"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Business name
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={name}
+                      onChange={handleOnChange}
+                      className="mt-1 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 border rounded-md"
+                    />
+                  </div>
+
+                  <div className="col-span-6 sm:col-span-3">
+                    <label
+                      for="last-name"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Business contact no
+                    </label>
+                    <input
+                      type="text"
+                      name="contactNo"
+                      value={contactNo}
+                      onChange={handleOnChange}
+                      className="mt-1 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 border rounded-md"
+                    />
+                  </div>
+
+                  <div className="col-span-6 sm:col-span-3">
+                    <label
+                      for="email-address"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Business description
+                    </label>
+                    <input
+                      type="text"
+                      name="description"
+                      value={description}
+                      onChange={handleOnChange}
+                      className="mt-1 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 border rounded-md"
+                    />
+                  </div>
+
+                  <div className="col-span-6 sm:col-span-3">
+                    <label
+                      for="email-address"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Business address
+                    </label>
+                    <input
+                      type="text"
+                      name="address"
+                      value={address}
+                      onChange={handleOnChange}
+                      className="mt-1 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 border rounded-md"
+                    />
+                  </div>
+                  <div className="col-span-6 sm:col-span-3">
+                    <label
+                      for="email-address"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Business grade
+                    </label>
+                    <input
+                      type="text"
+                      name="grade"
+                      value={grade}
+                      onChange={handleOnChange}
+                      className="mt-1 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 border rounded-md"
+                    />
+                  </div>
+
+                  <div className="col-span-6 sm:col-span-3" />
+
+                  <div className="col-span-6 sm:col-span-3">
+                    <label
+                      for="country"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Type
+                    </label>
+                    <select
+                      value={type}
+                      onChange={(e) =>
+                        setBusiness({ ...business, type: e.target.value })
+                      }
+                      className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    >
+                      <option>Select type</option>
+                      {types.map((type) => (
+                        <option value={type.sType} key={type._id}>
+                          {type.sType}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="col-span-6 sm:col-span-3">
+                    <label
+                      for="country"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Sub type
+                    </label>
+                    <select
+                      value={subType}
+                      onChange={(e) =>
+                        setBusiness({ ...business, subType: e.target.value })
+                      }
+                      className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    >
+                      <option>Select sub type</option>
+                      {subTypes.map((subType) => (
+                        <option value={subType.subType} key={subType._id}>
+                          {subType.subType}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  {/* Check boxes */}
+                  <label className="inline-flex items-center mt-3">
+                    <input
+                      type="checkbox"
+                      className="form-checkbox h-5 w-5 text-gray-600"
+                      onChange={(e) =>
+                        setBusiness({ ...business, service: e.target.checked })
+                      }
+                    />
+                    <span className="ml-2 text-gray-700">24 Service</span>
+                  </label>
+                  <label className="inline-flex items-center mt-3">
+                    <input
+                      type="checkbox"
+                      className="form-checkbox h-5 w-5 text-gray-600"
+                      onChange={(e) =>
+                        setBusiness({ ...business, parking: e.target.checked })
+                      }
+                    />
+                    <span className="ml-2 text-gray-700">Parking</span>
+                  </label>
+                  <label className="inline-flex items-center mt-3">
+                    <input
+                      type="checkbox"
+                      className="form-checkbox h-5 w-5 text-gray-600"
+                      onChange={(e) =>
+                        setBusiness({ ...business, card: e.target.checked })
+                      }
+                    />
+                    <span className="ml-2 text-gray-700">Card</span>
+                  </label>
+                  <label className="inline-flex items-center mt-3">
+                    <input
+                      type="checkbox"
+                      className="form-checkbox h-5 w-5 text-gray-600"
+                      onChange={(e) =>
+                        setBusiness({ ...business, delivery: e.target.checked })
+                      }
+                    />
+                    <span className="ml-2 text-gray-700">Delivery</span>
+                  </label>
+
+                  <label className="inline-flex items-center mt-3">
+                    <input
+                      type="checkbox"
+                      className="form-checkbox h-5 w-5 text-gray-600"
+                      onChange={(e) =>
+                        setBusiness({ ...business, verified: e.target.checked })
+                      }
+                    />
+                    <span className="ml-2 text-gray-700">Verified</span>
+                  </label>
+
+                  {/*File add */}
+
+                  <div>
+                    <label
+                      className="
+                 w-48
+                 flex flex-col
+                 items-center
+                 px-4
+                 py-2
+                 text-center
+                 bg-white
+                 rounded-md
+                 shadow-md
+                 tracking-wide
+                 uppercase
+                 border border-blue
+                 cursor-pointer
+                 hover:bg-purple-600 hover:text-white
+                 text-purple-600
+                 ease-linear
+                 transition-all
+                 duration-150
+             "
+                    >
+                      {/* <i className="fa fa-cloud-upload-alt fa-3x"></i> */}
+                      <span className="mt-2 text-base leading-normal">
+                        Select a file
+                      </span>
+                      <input
+                        type="file"
+                        name="image"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => setImage(e.target.files[0])}
+                      />
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                <button
+                  type="submit"
+                  className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      )}
+      {/* All business */}
+      {tab1 && (
         <div className="md:grid md:grid-cols-2">
           <div className="p-4 w-full">
             <label for="name" className="bg-white text-gray-600 ml-16">
@@ -674,99 +595,108 @@ export default function AdminHome() {
         </div>
       )}
 
-      <div className={`p-10 ${tab === 2 ? "block" : "hidden"}`}>
-        <form onSubmit={handleTypeSubmit}>
-          <div className="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1 w-40">
-            <div className="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
-              <p>
-                <label for="name" className="bg-white text-gray-600 px-1">
-                  Salon Type *
-                </label>
-              </p>
-            </div>
-            <p>
-              <input
-                id="name"
-                autocomplete="false"
-                tabindex="0"
-                type="text"
-                className="py-1 px-1 text-gray-900 outline-none block h-full w-full"
-                value={sType}
-                onChange={(e) => setSType(e.target.value)}
-              />
-            </p>
+      {tab2 && (
+        <div>
+          <div className="  AF  flex items-center justify-center text-blue-800 text-2xl mt-4 mb-4">
+            Add type
           </div>
-          <div className="border-t mt-6 pt-3">
-            <button
-              // onChange={handleSubmit}
-              className="rounded text-gray-100 px-3 py-1 bg-blue-500 hover:shadow-inner hover:bg-blue-700 transition-all duration-300"
-            >
-              Save
-            </button>
-          </div>{" "}
-        </form>
-      </div>
+          <form onSubmit={handleAddTypeSubmit}>
+            <div className="shadow overflow-hidden sm:rounded-md">
+              <div className="px-4 py-5 bg-white sm:p-6">
+                <div className="grid grid-cols-6 gap-6">
+                  <div className="col-span-6 sm:col-span-3">
+                    <label
+                      for="first-name"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Type name
+                    </label>
+                    <input
+                      type="text"
+                      name="addType"
+                      value={addType}
+                      onChange={handleAddType}
+                      className="mt-1 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 border rounded-md"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="px-4 py-3 bg-gray-50 text-left sm:px-6">
+                <button
+                  type="submit"
+                  className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      )}
 
-      {/* create a subType */}
-      <div className={`p-10 ${tab === 3 ? "block" : "hidden"}`}>
-        <form onSubmit={handleSubType}>
-          <div className="inline-block relative w-64">
-            <div className="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
-              <p>
-                <label for="username" className="bg-white text-gray-600 px-1">
-                  Type *
-                </label>
-              </p>
-            </div>
-            <select
-              onChange={(e) =>
-                setCreateSubType({ ...createSubType, subMain: e.target.value })
-              }
-              className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-            >
-              {types &&
-                types.map((type) => (
-                  <option key={type._id} value={type.sType}>
-                    {type.sType}
-                  </option>
-                ))}
-            </select>
+      {tab3 && (
+        <div>
+          <div className="  AF  flex items-center justify-center text-blue-800 text-2xl mt-4 mb-4">
+            Add sub type
           </div>
-          <div className="mt-10 border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1 w-40">
-            <div className="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
-              <p>
-                <label for="name" className="bg-white text-gray-600 px-1">
-                  Salon Sub Type *
-                </label>
-              </p>
+
+          <form action="#" onSubmit={handleAddSubTypeSubmit}>
+            <div className="shadow overflow-hidden sm:rounded-md">
+              <div className="px-4 py-5 bg-white sm:p-6">
+                <div className="grid grid-cols-6 gap-6">
+                  <div className="col-span-6 sm:col-span-3">
+                    <label
+                      for="country"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Type
+                    </label>
+                    <select
+                      value={mainType}
+                      onChange={(e) => setMainType(e.target.value)}
+                      className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    >
+                      <option>Select type</option>
+                      {types.map((type) => (
+                        <option value={type.sType} key={type._id}>
+                          {type.sType}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="col-span-6 sm:col-span-3" />
+
+                  <div className="col-span-6 sm:col-span-3">
+                    <label
+                      for="email-address"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Sub type
+                    </label>
+                    <input
+                      type="text"
+                      name="addSubType"
+                      value={addSubType}
+                      onChange={(e) => setAddSubType(e.target.value)}
+                      className="mt-1 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 border rounded-md"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="px-4 py-3 bg-gray-50 text-left sm:px-6">
+                <button
+                  type="submit"
+                  className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Save
+                </button>
+              </div>
             </div>
-            <p>
-              <input
-                id="name"
-                autocomplete="false"
-                tabindex="0"
-                type="text"
-                className="py-1 px-1 text-gray-900 outline-none block h-full w-full"
-                value={subType}
-                onChange={(e) => {
-                  setCreateSubType({
-                    ...createSubType,
-                    subType: e.target.value,
-                  });
-                }}
-              />
-            </p>
-          </div>
-          <div className="border-t mt-6 pt-3">
-            <button
-              // onChange={handleSubmit}
-              className="rounded text-gray-100 px-3 py-1 bg-blue-500 hover:shadow-inner hover:bg-blue-700 transition-all duration-300"
-            >
-              Save
-            </button>
-          </div>{" "}
-        </form>
-      </div>
+          </form>
+        </div>
+      )}
     </>
   );
-}
+};
+
+export default AdminHome;
