@@ -6,6 +6,8 @@ import {
   ADD_SALON_SUCCESS,
   ADD_SALON_FAIL,
   GET_ALL_SALONS_ERROR,
+  SALON_LOADING_TRUE,
+  SALON_LOADING_FALSE,
 } from "../actions/types";
 import { GET_SALON_SUCCESS } from "../actions/types";
 
@@ -50,6 +52,18 @@ export default function (state = initialState, action) {
       return {
         error: payload,
       };
+    case SALON_LOADING_TRUE: {
+      return {
+        ...state,
+        salonLoading: true,
+      };
+    }
+    case SALON_LOADING_FALSE: {
+      return {
+        ...state,
+        salonLoading: false,
+      };
+    }
     default:
       return state;
   }

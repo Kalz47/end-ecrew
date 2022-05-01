@@ -17,3 +17,13 @@
 .text-blue-colour-dark {
   color: #000066;
 }
+
+.loading {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  z-index: 99;
+  height: 100vh;
+  align-items: center;
+}

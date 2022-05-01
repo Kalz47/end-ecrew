@@ -31,5 +31,8 @@ export const GET_SUB_TYPES_FAIL = "GET_SUB_TYPES_FAIL";
 export const ADD_SUB_TYPE_SUCCESS = "ADD_SUB_TYPE_SUCCESS";
 export const ADD_SUB_TYPE_FAIL = "ADD_SUB_TYPE_FAIL";
 
+export const SALON_LOADING_TRUE = "SALON_LOADING_TRUE";
+export const SALON_LOADING_FALSE = "SALON_LOADING_FALSE";
+
 // export const PORT = "https://ecrew-back.herokuapp.com/api";
 export const PORT = "http://localhost:8000/api";
