@@ -18,6 +18,7 @@ import AddCard from "./AddCard";
 import axios from "axios";
 import {
   GET_ALL_SALONS_SUCCESS,
+  PORT,
   SALON_LOADING_FALSE,
   SALON_LOADING_TRUE,
 } from "../../../actions/types";
@@ -97,7 +98,7 @@ export default function Home() {
 
       console.log("s2==>", s2);
       const res = await axios.get(
-        `http://localhost:8000/api/salon?salonType=${s1}&salonSubType=${s2}`
+        `${PORT}/salon?salonType=${s1}&salonSubType=${s2}`
       );
       dispatch({
         type: GET_ALL_SALONS_SUCCESS,
