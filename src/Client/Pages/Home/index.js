@@ -94,7 +94,6 @@ export default function Home() {
           s2 = subTypeKey;
         }
       }
-      console.log("s1==>", s1);
 
       console.log("s2==>", s2);
       const res = await axios.get(
