@@ -111,8 +111,16 @@ export default function Home() {
       setTimeout(() => {
         getSalonsByQuery();
       }, 10);
+    } else {
+      dispatch(getAllSalons());
     }
   }, [typeKeyName, subTypeKey]);
+
+  const removeFiltersHandle = (e) => {
+    console.log("clicked");
+    setTypeKeyName("");
+    setTypeKey("");
+  };
 
   return (
     <Container className="h-screen">
@@ -143,6 +151,12 @@ export default function Home() {
                   </div>
                 </div>
               ))}
+              <div
+                onClick={removeFiltersHandle}
+                className="border rounded-lg p-3 font-sans AF text-md text-center cursor-pointer font-black bg-blue-800 text-white hover:text-lg"
+              >
+                Remove Filters
+              </div>
             </div>
             <div className="px-16">
               <button
@@ -170,6 +184,12 @@ export default function Home() {
                   </div>
                 </div>
               ))}
+              <div
+                onClick={removeFiltersHandle}
+                className="border rounded-lg p-3 font-sans AF text-md text-center cursor-pointer font-black bg-blue-800 text-white hover:text-lg"
+              >
+                Remove Filters
+              </div>
             </div>
           </div>
           <div className="md:col-span-3 mt-10">

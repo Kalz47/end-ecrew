@@ -14,6 +14,7 @@ export default function ServiceCard({ salon }) {
   useEffect(() => {
     setImage(`${PORT}/salon/image/${salon._id}`);
   }, [salon._id]);
+
   return (
     <div className="w-full md:h-auto h-auto bg-white rounded-lg sahdow-lg overflow-hidden flex flex-row">
       <div className="w-2/5 h-full">
@@ -140,6 +141,15 @@ export default function ServiceCard({ salon }) {
             <div>
               {" "}
               <img className="w-6 h-6" alt="Parking" src={Card} />
+            </div>
+          )}
+          {salon.salonSubType.length > 0 && (
+            <div className="flex flex-row space-x-2 justify-center ">
+              {salon.salonSubType.map((subType) => (
+                <div className="AF font-semibold bg-blue-500 w-16 text-center text-sm text-white rounded-lg mt-2">
+                  <div>{subType}</div>
+                </div>
+              ))}
             </div>
           )}
         </div>

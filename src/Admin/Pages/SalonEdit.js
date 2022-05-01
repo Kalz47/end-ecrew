@@ -7,6 +7,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { getSingleSalon } from "../../actions/salon";
 import { useParams } from "react-router-dom";
+import Multiselect from "multiselect-react-dropdown";
+
 export default function SalonEdit() {
   const dispatch = useDispatch();
   const { salon, salonLoading } = useSelector((state) => state.salon);
@@ -15,6 +17,7 @@ export default function SalonEdit() {
   useEffect(() => {
     dispatch(getSingleSalon(id));
   }, []);
+  const [selected, setSelected] = useState("");
 
   //Add business
   const [business, setBusiness] = useState({
@@ -99,6 +102,15 @@ export default function SalonEdit() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    let setSub = [];
+
+    for (let i = 0; i < selected.length; i++) {
+      setSub.push(selected[i].subType);
+    }
+
+    let newArrayJoin = setSub.join(",");
+    console.log(newArrayJoin);
 
     if (!name) {
       toast.error("Business name required");
@@ -285,22 +297,15 @@ export default function SalonEdit() {
                     for="country"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    Sub type
+                    {/* Sub type */}
                   </label>
-                  <select
-                    value={subType}
-                    onChange={(e) =>
-                      setBusiness({ ...business, subType: e.target.value })
-                    }
-                    className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  >
-                    <option>Select sub type</option>
-                    {subTypes.map((subType) => (
-                      <option value={subType.subType} key={subType._id}>
-                        {subType.subType}
-                      </option>
-                    ))}
-                  </select>
+                  {/* <Multiselect
+                    options={subTypes}
+                    selectedValues={salon.salonSubType}
+                    onSelect={setSelected} // Function will trigger on select event
+                    // onRemove={this.onRemove} // Function will trigger on remove event
+                    displayValue="subType" // Property name to display in the dropdown options
+                  /> */}
                 </div>
                 {/* Check boxes */}
                 <label className="inline-flex items-center mt-3">

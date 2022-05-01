@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllSalons } from "../../../actions/salon";
 import { Link } from "react-router-dom";
 import { logout } from "../../../actions/auth";
+import Multiselect from "multiselect-react-dropdown";
 
 const AdminHome = () => {
   //common
@@ -40,6 +41,7 @@ const AdminHome = () => {
     handleLogout();
   };
   const [types, setTypes] = useState([]);
+  const [selected, setSelected] = useState("");
 
   useEffect(() => {
     const getTypes = async () => {
@@ -104,6 +106,15 @@ const AdminHome = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    let setSub = [];
+
+    for (let i = 0; i < selected.length; i++) {
+      setSub.push(selected[i].subType);
+    }
+
+    let newArrayJoin = setSub.join(",");
+    console.log(newArrayJoin);
+
     if (!name) {
       toast.error("Business name required");
       return;
@@ -120,7 +131,7 @@ const AdminHome = () => {
       toast.error("Business type required");
       return;
     }
-    if (!subType) {
+    if (!newArrayJoin) {
       toast.error("Business sub type required");
       return;
     }
@@ -138,14 +149,14 @@ const AdminHome = () => {
     data.append("card", card);
     data.append("address", address);
     data.append("description", description);
-    data.append("salonSubType", subType);
+    data.append("salonSubType", newArrayJoin);
     data.append("verified", verified);
 
     image && data.append("image", image);
 
     try {
       const res = await axios.post(PORT + "/salon", data);
-      console.log(res);
+      // console.log(res);
       toast.success("Business added");
     } catch (error) {
       toast.error("Business adding fail");
@@ -239,6 +250,8 @@ const AdminHome = () => {
   const handleLogout = () => {
     dispatch(logout());
   };
+
+  console.log(subType);
 
   return (
     <>
@@ -385,21 +398,15 @@ const AdminHome = () => {
                     >
                       Sub type
                     </label>
-                    <select
-                      value={subType}
-                      onChange={(e) =>
-                        setBusiness({ ...business, subType: e.target.value })
-                      }
-                      className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    >
-                      <option>Select sub type</option>
-                      {subTypes.map((subType) => (
-                        <option value={subType.subType} key={subType._id}>
-                          {subType.subType}
-                        </option>
-                      ))}
-                    </select>
+                    <Multiselect
+                      options={subTypes}
+                      selectedValues={(e) => console.log(e)}
+                      onSelect={setSelected} // Function will trigger on select event
+                      // onRemove={this.onRemove} // Function will trigger on remove event
+                      displayValue="subType" // Property name to display in the dropdown options
+                    />
                   </div>
+
                   {/* Check boxes */}
                   <label className="inline-flex items-center mt-3">
                     <input
