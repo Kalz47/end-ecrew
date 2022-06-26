@@ -15,11 +15,13 @@ export default function ServiceCard({ salon }) {
     setImage(`${PORT}/salon/image/${salon._id}`);
   }, [salon._id]);
 
+  console.log(image);
+
   return (
     <div className="w-full md:h-auto h-auto bg-white rounded-lg sahdow-lg overflow-hidden flex flex-row">
       <div className="w-2/5 h-full">
         <img
-          className="object-center object-cover h-48"
+          className="object-center object-cover h-48 "
           src={image}
           alt="photo"
         />
@@ -55,7 +57,7 @@ export default function ServiceCard({ salon }) {
         )}
         {salon.contact ? (
           <>
-            <div className="flex flex-row ...">
+            <div className="flex flex-row ... mt-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="md:h-6 md:w-6 h-4 w-4 mt-1 md:mt-0 text-gray-500"

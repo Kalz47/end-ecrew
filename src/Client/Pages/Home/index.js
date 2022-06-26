@@ -34,8 +34,7 @@ export default function Home() {
   const [typeKey, setTypeKey] = useState("");
   const [typeKeyName, setTypeKeyName] = useState("");
   const [subTypeKey, setSubTypeKey] = useState("");
-  const [s1, setS1] = useState("");
-  const [s2, setS2] = useState("");
+  const [subShow, setSubShow] = useState(false);
 
   useEffect(() => {
     dispatch(getAllSalons());
@@ -177,6 +176,8 @@ export default function Home() {
                     onClick={(e) => {
                       setTypeKey(type._id);
                       setTypeKeyName(type.sType);
+                      setSubShow(true);
+                      setShow(false);
                     }}
                     className="border rounded-lg p-3 font-sans AF text-md text-center cursor-pointer font-black hover:bg-blue-800 hover:text-white hover:text-lg"
                   >
@@ -193,9 +194,10 @@ export default function Home() {
             </div>
           </div>
           <div className="md:col-span-3 mt-10">
-            <div className={`${show ? "block" : "hidden"} md:block`}>
+            <div className={`${subShow ? "block" : "hidden"} md:block`}>
               <div className="mb-4 px-4 flex justify-center md:space-x-4 flex-col md:flex-row w-full items-center space-y-4 md:space-y-0">
-                {subTypes &&
+                {subShow &&
+                  subTypes &&
                   subTypes.length > 0 &&
                   subTypes.map((subType) => (
                     <div
