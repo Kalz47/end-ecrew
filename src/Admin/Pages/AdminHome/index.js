@@ -3,27 +3,47 @@ import { TimePicker } from "antd";
 import moment from "moment";
 import "antd/dist/antd.css";
 import { useDispatch, useSelector } from "react-redux";
-import { getLocations, addSalon, addNewLocation } from "../../../actions/salon";
+import { getAllSalons } from "../../../actions/salon";
+import { addSalon, addNewLocation } from "../../../actions/salon";
+import { getLocations, getTypes, addSalonType } from "../../../actions/salon";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import { PORT } from "../../../actions/types";
+import { logout } from "../../../actions/auth";
 
 export default function AdminHome() {
   const [tab, setTab] = useState(0);
-
   const dispatch = useDispatch();
+  const { salons, salonLoading } = useSelector((state) => state.salon);
+  // const [role, setRole] = useState("");
+
+  const role = localStorage.getItem("role");
+
+  useEffect(() => {
+    dispatch(getAllSalons());
+  }, [dispatch]);
+
+  console.log(salons, "admin form");
 
   useEffect(() => {
     dispatch(getLocations());
+    dispatch(getTypes());
   }, [dispatch]);
 
   const { addSalonSuc, error } = useSelector((state) => state.salon);
   const { locations, locationsLoading, locationError } = useSelector(
     (state) => state.location
   );
+  const { types, typeLoading, typeError } = useSelector((state) => state.type);
 
   const [name, setName] = useState("");
   const [location, setLocation] = useState(
     locations && !locationsLoading ? locations[0].name : ""
+  );
+  const [salonType, setSalonType] = useState(
+    types && !typeLoading ? types[0].name : ""
   );
   const [contact, setContact] = useState("");
 
@@ -34,8 +54,12 @@ export default function AdminHome() {
   const [wifi, setWifi] = useState(false);
   const [parking, setParking] = useState(false);
   const [ac, setAc] = useState(false);
+  const [card, setCard] = useState(false);
+
   const [image, setImage] = useState("");
   const [addLocation, setAddLocation] = useState("");
+  const [sType, setSType] = useState("");
+  const [address, setAddress] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,6 +67,8 @@ export default function AdminHome() {
     let data = new FormData();
     data.append("name", name);
     data.append("location", location);
+    data.append("salonType", salonType);
+
     data.append("grade", grade);
 
     data.append("contact", contact);
@@ -51,6 +77,8 @@ export default function AdminHome() {
     data.append("parking", parking);
     data.append("ac", ac);
     data.append("wifi", wifi);
+    data.append("card", card);
+    data.append("address", address);
 
     image && data.append("image", image);
 
@@ -75,15 +103,47 @@ export default function AdminHome() {
     dispatch(addNewLocation(data));
   };
 
-  // useEffect(() => {
-  //   if (locationError) {
-  //     toast.error(locationError);
-  //   } else {
-  //     setTimeout(() => {
-  //       window.location.reload();
-  //     }, 1500);
-  //   }
-  // }, []);
+  const handleTypeSubmit = (e) => {
+    e.preventDefault();
+
+    const data = { sType };
+    dispatch(addSalonType(data));
+    setTimeout(() => {
+      window.location.reload();
+    });
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const res = await axios.delete(`${PORT}/salon/${id}`);
+      toast.success(res);
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
+
+  const handleActivate = async (id) => {
+    await axios.put(`${PORT}/salon/active/${id}`);
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  };
+
+  const handleDeactivate = async (id) => {
+    await axios.put(`${PORT}/salon/deactivate/${id}`);
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  };
+
+  console.log("role", role);
 
   return (
     <>
@@ -102,6 +162,9 @@ export default function AdminHome() {
       {locationError && (
         <h1 className="text-red-500 text-center">{locationError}</h1>
       )}
+      {typeError && (
+        <h1 className="text-red-500 text-center">{locationError}</h1>
+      )}
 
       <div className="flex justify-center flex-row space-x-4">
         <button
@@ -115,6 +178,18 @@ export default function AdminHome() {
           className="py-2  px-6 border border-blue-500 hover:bg-blue-600 hover:text-white text-blue-500 rounded-md mt-4"
         >
           Add Location
+        </button>
+        <button
+          onClick={() => setTab(2)}
+          className="py-2  px-6 border border-blue-500 hover:bg-blue-600 hover:text-white text-blue-500 rounded-md mt-4"
+        >
+          Add Salon Type
+        </button>
+        <button
+          onClick={handleLogout}
+          className="py-2  px-6 border border-blue-500 hover:bg-blue-600 hover:text-white text-blue-500 rounded-md mt-4"
+        >
+          Logout
         </button>
       </div>
       <div className={`${tab === 0 ? "block" : "hidden"}`}>
@@ -144,6 +219,7 @@ export default function AdminHome() {
                 />
               </p>
             </div>
+
             <div className="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1">
               <div className="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
                 <p>
@@ -168,6 +244,28 @@ export default function AdminHome() {
             <div className="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1">
               <div className="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
                 <p>
+                  <label for="lastname" className="bg-white text-gray-600 px-1">
+                    Address *
+                  </label>
+                </p>
+              </div>
+              <p>
+                <input
+                  id="lastname"
+                  autocomplete="false"
+                  tabindex="0"
+                  type="text"
+                  name="contact"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  className="py-1 px-1 outline-none block h-full w-full"
+                />
+              </p>
+            </div>
+
+            <div className="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1">
+              <div className="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
+                <p>
                   <label for="username" className="bg-white text-gray-600 px-1">
                     Grade *
                   </label>
@@ -186,28 +284,73 @@ export default function AdminHome() {
                 />
               </p>
             </div>
-            <div className="inline-block relative w-64">
-              <select
-                onChange={(e) => setLocation(e.target.value)}
-                className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-              >
-                {locations &&
-                  locations.map((location) => (
-                    <option key={location._id} value={location.name}>
-                      {location.name}{" "}
-                    </option>
-                  ))}
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                <svg
-                  className="fill-current h-4 w-4"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
+            <div className="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1">
+              <div className="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
+                <p>
+                  <label for="name" className="bg-white text-gray-600 px-1">
+                    Location *
+                  </label>
+                </p>
+            <div className="space-x-8">
+              <div className="inline-block relative w-64">
+                <div className="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
+                  <p>
+                    <label
+                      for="username"
+                      className="bg-white text-gray-600 px-1"
+                    >
+                      Location *
+                    </label>
+                  </p>
+                </div>
+                <select
+                  onChange={(e) => setLocation(e.target.value)}
+                  className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
                 >
-                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                </svg>
+                  {locations &&
+                    locations.map((location) => (
+                      <option key={location._id} value={location.name}>
+                        {location.name}
+                      </option>
+                    ))}
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"></div>
               </div>
+              {/* Set Type */}
+              <div className="inline-block relative w-64">
+                <div className="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
+                  <p>
+                    <label
+                      for="username"
+                      className="bg-white text-gray-600 px-1"
+                    >
+                      Type *
+                    </label>
+                  </p>
+                </div>
+                <select
+                  onChange={(e) => setSalonType(e.target.value)}
+                  className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+                >
+                  {types &&
+                    types.map((type) => (
+                      <option key={type._id} value={type.sType}>
+                        {type.sType}
+                      </option>
+                    ))}
+                </select>
+              </div>
+              <p>
+                <input
+                  id="name"
+                  autocomplete="false"
+                  tabindex="0"
+                  type="text"
+                  className="py-1 px-1 text-gray-900 outline-none block h-full w-full"
+                />
+              </p>
             </div>
+
             <div>
               <label
                 className="
@@ -242,6 +385,24 @@ export default function AdminHome() {
                   onChange={(e) => setImage(e.target.files[0])}
                 />
               </label>
+            </div>
+            <div className="inline-block relative w-64">
+              <select className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+                <option>
+                  Really long option that will likely overlap the chevron
+                </option>
+                <option>Option 2</option>
+                <option>Option 3</option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 mb-20">
+                <svg
+                  className="fill-current h-4 w-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                </svg>
+              </div>
             </div>
             <div className="flex flex-row space-x-8">
               <div>
@@ -290,6 +451,14 @@ export default function AdminHome() {
                 />
                 <span className="ml-2 text-gray-700">Wifi</span>
               </label>
+              <label className="inline-flex items-center mt-3">
+                <input
+                  type="checkbox"
+                  className="form-checkbox h-5 w-5 text-gray-600"
+                  onChange={(e) => setCard(e.target.checked)}
+                />
+                <span className="ml-2 text-gray-700">Card</span>
+              </label>
             </div>
           </div>
           <div className="border-t mt-6 pt-3">
@@ -318,6 +487,129 @@ export default function AdminHome() {
                 className="py-1 px-1 text-gray-900 outline-none block h-full w-full"
                 value={addLocation}
                 onChange={(e) => setAddLocation(e.target.value)}
+              />
+            </p>
+          </div>
+          <div className="border-t mt-6 pt-3">
+            <button
+              // onChange={handleSubmit}
+              className="rounded text-gray-100 px-3 py-1 bg-blue-500 hover:shadow-inner hover:bg-blue-700 transition-all duration-300"
+            >
+              Save
+            </button>
+          </div>{" "}
+        </form>
+      </div>
+
+      {/* Salon edit or delete */}
+      {role && (
+        <div className="md:grid md:grid-cols-2">
+          <div className="p-4 w-full">
+            <label for="name" className="bg-white text-gray-600 ml-16">
+              Salon List{" "}
+            </label>{" "}
+            <table className="table-auto w-full my-6">
+              <thead>
+                <tr>
+                  <th className="w-1/5 text-center text-gray-600 AF">
+                    Salon name
+                  </th>
+                  <th className="w-1/5 text-center text-gray-600 AF">
+                    Location
+                  </th>
+                  <th className="w-1/5 text-center text-gray-600 AF">
+                    Salon Type
+                  </th>
+                  <th className="w-1/5 text-center text-gray-600 AF">Edit</th>
+                  <th className="w-1/5 text-center text-gray-600 AF">Delete</th>
+                  <th className="w-1/5 text-center text-gray-600 AF">Active</th>
+                  <th className="w-1/5 text-center text-gray-600 AF">
+                    Deactive
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {salonLoading && "There is no more salons"}
+                {salons && !salonLoading
+                  ? salons.map((salon) => (
+                      <>
+                        <tr className="">
+                          <td className="text-center text-gray-600 AF">
+                            {salon.name}
+                          </td>
+                          <td className="text-center text-gray-600 AF">
+                            {salon.location}
+                          </td>
+                          <td className="text-center text-gray-600 AF">
+                            {salon.salonType}
+                          </td>
+                          <td className="text-center">
+                            <Link to={`/adminEdit/${salon._id}`}>
+                              <button class="bg-yellow-700 hover:bg-yellow-600 text-white font-bold py-1 px-2 rounded inline-flex items-center">
+                                <i className="fas fa-edit fill-current w-4 h-4 mr-2"></i>
+                                <span className="font-normal">Edit</span>
+                              </button>
+                            </Link>
+                          </td>
+                          <td className="text-center py-1">
+                            <button
+                              onClick={() => handleDelete(salon._id)}
+                              className="bg-red-700 hover:bg-red-600 text-white font-bold py-1 px-2 rounded inline-flex items-center"
+                            >
+                              <i className="far fa-trash-alt fill-current w-4 h-4 mr-2"></i>
+                              <span className="font-normal">Delete</span>
+                            </button>
+                          </td>
+                          <td className="text-center py-1">
+                            {salon.active === 0 && (
+                              <button
+                                class="bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-2 rounded inline-flex items-center"
+                                onClick={() => handleActivate(salon._id)}
+                              >
+                                <span className="font-normal">Active</span>
+                              </button>
+                            )}
+                          </td>
+                          <td className="text-center py-1">
+                            {salon.active === 1 && (
+                              <button
+                                class="bg-red-700 hover:bg-red-600 text-white font-bold py-1 px-2 rounded inline-flex items-center"
+                                onClick={() => handleDeactivate(salon._id)}
+                              >
+                                <span className="font-normal">Deactive</span>
+                              </button>
+                            )}
+                          </td>
+                        </tr>{" "}
+                      </>
+                    ))
+                  : "Loading"}
+              </tbody>
+            </table>
+          </div>
+          <div></div>
+        </div>
+      )}
+
+      <div className={`p-10 ${tab === 2 ? "block" : "hidden"}`}>
+        <form onSubmit={handleTypeSubmit}>
+          <div className="border focus-within:border-blue-500 focus-within:text-blue-500 transition-all duration-500 relative rounded p-1 w-40">
+            <div className="-mt-4 absolute tracking-wider px-1 uppercase text-xs">
+              <p>
+                <label for="name" className="bg-white text-gray-600 px-1">
+                  Salon Type *
+                </label>
+              </p>
+            </div>
+            <p>
+              <input
+                id="name"
+                autocomplete="false"
+                tabindex="0"
+                type="text"
+                className="py-1 px-1 text-gray-900 outline-none block h-full w-full"
+                value={sType}
+                onChange={(e) => setSType(e.target.value)}
               />
             </p>
           </div>

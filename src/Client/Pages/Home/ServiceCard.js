@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from "react";
 import Parking from "../../Components/logo/parking.png";
 import AirCond from "../../Components/logo/air-conditioner.png";
+import Card from "../../Components/logo/credit-card.png";
+
 import { PORT } from "../../../actions/types";
 
 export default function ServiceCard({ salon }) {
@@ -11,8 +13,36 @@ export default function ServiceCard({ salon }) {
   useEffect(() => {
     setImage(`${PORT}/salon/image/${salon._id}`);
   }, [salon._id]);
-  console.log(salon);
   return (
+
+    <div className="w-full md:h-auto h-32 bg-white rounded-lg sahdow-lg overflow-hidden flex flex-row">
+      <div className="w-2/5 h-36 md:h-80">
+        <img
+          className="object-center object-cover w-full h-full"
+          src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80"
+          alt="photo"
+        />
+      </div>
+      <div className="w-full md:w-3/5 text-left p-2 md:p-4 md:space-y-2">
+        <div className="flex md:flex-col flex-row h-10 md:h-auto">
+          <p className="md:text-3xl text-lg font-bold AF text-blue-colour-dark">
+            {salon.name}
+            {salon.grade ? (
+              <>
+                <span className="md:text-3xl text-lg text-gray-500"> | </span>
+                <span className="text-gray-500 md:text-xl text-sm">
+                  {/* Grade {salon.grade} */}
+                </span>
+              </>
+            ) : (
+              ""
+            )}
+          </p>
+
+          <p className="md:text-base text-xs text-gray-400 font-normal AF mt-2 md:mt-0 md:pl-0 pl-2">
+            {salon.location}
+          </p>
+        </div>
     <div className="w-full bg-white rounded-lg sahdow-lg overflow-hidden flex flex-col md:flex-row">
       <div className="w-full md:w-2/5 h-80">
         {image ? (
@@ -41,11 +71,16 @@ export default function ServiceCard({ salon }) {
         <p className="text-base text-gray-400 font-normal AF">
           {salon.location}
         </p>
+        {salon.address && (
+          <p className="text-base text-gray-400 font-normal AF">
+            {salon.address}
+          </p>
+        )}
 
         <div class="flex flex-row ...">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6 text-gray-500"
+            className="md:h-6 md:w-6 h-4 w-4 mt-1 md:mt-0 text-gray-500"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -64,7 +99,7 @@ export default function ServiceCard({ salon }) {
         <div class="flex flex-row ...">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6 text-gray-500"
+            className="md:h-6 md:w-6 h-4 w-4 mt-1 md:mt-0 text-gray-500"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -83,7 +118,7 @@ export default function ServiceCard({ salon }) {
         <div class="flex flex-row ...">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6 text-gray-500"
+            className="md:h-6 md:w-6 h-4 w-4 mt-1 md:mt-0 text-gray-500"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -136,6 +171,14 @@ export default function ServiceCard({ salon }) {
             <div>
               {" "}
               <img className="w-6 h-6" alt="Parking" src={Parking} />
+            </div>
+          ) : (
+            ""
+          )}
+          {salon.card ? (
+            <div>
+              {" "}
+              <img className="w-6 h-6" alt="Card" src={Card} />
             </div>
           ) : (
             ""
